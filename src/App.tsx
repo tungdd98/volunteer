@@ -1,58 +1,91 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { FC, useCallback, useEffect, useState } from "react";
 
-function App() {
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { pick, get } from "lodash";
+import { BrowserRouter } from "react-router-dom";
+
+import { useAppDispatch } from "app/hooks";
+import { store } from "app/store";
+import CustomSnackbar from "components/CustomSnackbar/CustomSnackbar";
+import Loader from "components/Loader/Loader";
+import { LOCAL_STORAGE_AUTH_KEY, setUserInfo } from "features/auth/auth";
+import { deepParseJson } from "helpers/convert/deep-parse-json";
+import RouterWrapper from "routes/RouterWrapper";
+
+import { themeOptions } from "./themes/theme-one";
+
+const theme = createTheme(themeOptions);
+
+const App: FC = () => {
+  const auth = getAuth();
+
+  const dispatch = useAppDispatch();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const checkAuthenticated = useCallback(() => {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        user.getIdTokenResult().then(res => {
+          const userData = pick(user, [
+            "phoneNumber",
+            "photoURL",
+            "displayName",
+            "email",
+          ]);
+          dispatch(
+            setUserInfo({
+              ...userData,
+              accessToken: res.token,
+            })
+          );
+        });
+      }
+
+      setIsLoading(false);
+    });
+  }, [auth, dispatch]);
+
+  useEffect(() => {
+    checkAuthenticated();
+  }, [checkAuthenticated]);
+
+  useEffect(() => {
+    const listenStorage = (storageEvent: StorageEvent) => {
+      if (storageEvent.key === LOCAL_STORAGE_AUTH_KEY) {
+        const loggedInStateOnRedux = !!store.getState().auth.userInfo;
+        const loggedInStateOnLocalStorage = !!get(
+          deepParseJson(storageEvent.newValue),
+          "userInfo"
+        );
+
+        if (!loggedInStateOnLocalStorage && loggedInStateOnRedux) {
+          window.location.reload();
+        }
+      }
+    };
+
+    window.addEventListener("storage", listenStorage);
+
+    return () => {
+      window.removeEventListener("storage", listenStorage);
+    };
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <CssBaseline />
+        <RouterWrapper />
+        <CustomSnackbar />
+      </BrowserRouter>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

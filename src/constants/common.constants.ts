@@ -1,0 +1,1 @@
+export const DEFAULT_HIDE_SNACKBAR = 2000;
