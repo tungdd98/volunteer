@@ -138,6 +138,8 @@ const LoginScreen: FC = () => {
         validationSchema={loginSchema}
         initialValues={initialLoginForm}
         onSubmit={loginWithEmailPassword}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
         {({ isSubmitting }) => (
           <Form>

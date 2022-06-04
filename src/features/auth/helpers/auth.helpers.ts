@@ -1,5 +1,7 @@
 import * as yup from "yup";
 
+import { DefaultMessages } from "constants/message.constants";
+
 import { AuthMessages, LoginForm, RegisterForm } from "../auth";
 
 export const initialLoginForm: LoginForm = {
@@ -8,8 +10,11 @@ export const initialLoginForm: LoginForm = {
 };
 
 export const loginSchema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().required(),
+  email: yup
+    .string()
+    .email(AuthMessages.EMAIL_INVALID)
+    .required(DefaultMessages.REQUIRED),
+  password: yup.string().required(DefaultMessages.REQUIRED),
 });
 
 export const initialRegisterForm: RegisterForm = {
@@ -19,8 +24,12 @@ export const initialRegisterForm: RegisterForm = {
 };
 
 export const registerSchema = yup.object().shape({
-  email: yup.string().email().required().max(255),
-  password: yup.string().required(),
+  email: yup
+    .string()
+    .email(AuthMessages.EMAIL_INVALID)
+    .required(DefaultMessages.REQUIRED)
+    .max(255),
+  password: yup.string().required(DefaultMessages.REQUIRED),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), null], AuthMessages.PASSWORD_NOT_MATCH),

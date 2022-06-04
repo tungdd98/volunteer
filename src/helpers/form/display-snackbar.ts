@@ -18,6 +18,8 @@ export const handleShowSnackbar = ({
   const message = error
     ? get(DefaultMessages, error.code) || "Unknown message"
     : msg;
+  // eslint-disable-next-line no-console
+  console.log("error", error);
   dispatch(
     displaySnackbar({
       message,

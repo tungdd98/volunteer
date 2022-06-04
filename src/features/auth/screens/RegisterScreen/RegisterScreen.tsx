@@ -67,6 +67,8 @@ const RegisterScreen: FC = () => {
         validationSchema={registerSchema}
         initialValues={initialRegisterForm}
         onSubmit={registerUser}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
         {({ isSubmitting }) => (
           <Form>

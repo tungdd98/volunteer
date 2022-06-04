@@ -1,9 +1,10 @@
 import React from "react";
 
-import AuthLayout from "layouts/AuthLayout/AuthLayout";
 import { RouteItem } from "types/route.types";
 
 import { AuthPathsEnum } from "../auth";
+
+const AuthLayout = React.lazy(() => import("layouts/AuthLayout/AuthLayout"));
 
 const LOGIN_SCREEN: RouteItem = {
   id: "login",
