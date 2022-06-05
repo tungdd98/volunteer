@@ -33,7 +33,7 @@ const BannerItem: FC<BannerItemProps> = ({ banner }) => {
         borderRadius={0}
       />
 
-      <Container sx={{ px: 2, py: 1 }}>
+      <Container sx={{ px: 2, py: 1 }} maxWidth="sm">
         <Typography variant="subtitle1">{banner.title}</Typography>
         <Box
           sx={{
