@@ -10,7 +10,7 @@ import {
   SignUpPersonalInformationMode,
 } from "features/auth/auth";
 
-interface InputScreenProps {
+interface EditPersonalProps {
   setMode: React.Dispatch<React.SetStateAction<SignUpPersonalInformationMode>>;
   userProfile: SignUpPersonalInformationForm;
   setUserProfile: React.Dispatch<
@@ -18,7 +18,7 @@ interface InputScreenProps {
   >;
 }
 
-const InputScreen: FC<InputScreenProps> = ({
+const EditPersonal: FC<EditPersonalProps> = ({
   setMode,
   userProfile,
   setUserProfile,
@@ -55,4 +55,4 @@ const InputScreen: FC<InputScreenProps> = ({
   );
 };
 
-export default memo(InputScreen);
+export default memo(EditPersonal);

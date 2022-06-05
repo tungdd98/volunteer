@@ -112,7 +112,9 @@ const Navbar: FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>Thông tin cá nhân</MenuItem>
+        <MenuItem component={Link} to={AuthPathsEnum.MY_PROFILE}>
+          Thông tin cá nhân
+        </MenuItem>
         <Divider />
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

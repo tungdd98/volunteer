@@ -16,12 +16,15 @@ import {
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
 import { ROOT_ROUTE } from "routes/routes.config";
 
-interface PreviewScreenProps {
+interface PreviewPersonalProps {
   setMode: React.Dispatch<React.SetStateAction<SignUpPersonalInformationMode>>;
   userProfile: SignUpPersonalInformationForm;
 }
 
-const PreviewScreen: FC<PreviewScreenProps> = ({ setMode, userProfile }) => {
+const PreviewPersonal: FC<PreviewPersonalProps> = ({
+  setMode,
+  userProfile,
+}) => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(state => state.auth);
 
@@ -48,7 +51,7 @@ const PreviewScreen: FC<PreviewScreenProps> = ({ setMode, userProfile }) => {
               setUserInfo({
                 ...userInfo,
                 displayName,
-                photoURL: photoUrlUploaded || null,
+                photoURL: photoUrlUploaded || userInfo.photoURL,
               })
             );
             history.push(ROOT_ROUTE);
@@ -123,4 +126,4 @@ const PreviewScreen: FC<PreviewScreenProps> = ({ setMode, userProfile }) => {
   );
 };
 
-export default memo(PreviewScreen);
+export default memo(PreviewPersonal);

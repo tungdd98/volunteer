@@ -19,6 +19,9 @@ export const themeOptions: ThemeOptions = {
       fontWeight: 600,
       fontSize: 24,
     },
+    h6: {
+      fontWeight: 600,
+    },
   },
   palette: {
     primary: {
@@ -28,7 +31,7 @@ export const themeOptions: ThemeOptions = {
       main: "#f4f5f7",
     },
     info: {
-      main: "#11cdef",
+      main: "#BBE1FA",
     },
     success: {
       main: "#2dce89",

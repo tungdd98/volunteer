@@ -1,14 +1,14 @@
 import React, { FC, memo } from "react";
 
-import { Typography } from "@mui/material";
+import { Typography, TypographyProps } from "@mui/material";
 
-interface RowDataProps {
+interface RowDataProps extends TypographyProps {
   content?: string | null;
 }
 
-const RowData: FC<RowDataProps> = ({ content }) => {
+const RowData: FC<RowDataProps> = ({ content, ...props }) => {
   return content ? (
-    <Typography>{content}</Typography>
+    <Typography {...props}>{content}</Typography>
   ) : (
     <Typography variant="body2" color="text.disabled">
       Không có thông tin
