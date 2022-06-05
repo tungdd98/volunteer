@@ -24,4 +24,19 @@ const REGISTER_SCREEN: RouteItem = {
   isAuthRoute: true,
 };
 
-export const AUTH_ROUTES = [LOGIN_SCREEN, REGISTER_SCREEN];
+const SIGN_UP_PERSONAL_INFORMATION_SCREEN: RouteItem = {
+  id: "sign-up-personal-information",
+  path: AuthPathsEnum.SIGN_UP_PERSONAL_INFO,
+  component: React.lazy(
+    () =>
+      import(
+        "../screens/SignUpPersonalInformationScreen/SignUpPersonalInformationScreen"
+      )
+  ),
+};
+
+export const AUTH_ROUTES = [
+  LOGIN_SCREEN,
+  REGISTER_SCREEN,
+  SIGN_UP_PERSONAL_INFORMATION_SCREEN,
+];

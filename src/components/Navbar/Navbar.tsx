@@ -13,14 +13,14 @@ import {
   MenuItem,
   Stack,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import CustomLink from "components/CustomLink/CustomLink";
 import { AuthPathsEnum, setUserInfo } from "features/auth/auth";
-import { AUTH_ROUTE } from "routes/routes.config";
+import { AUTH_ROUTE, ROOT_ROUTE } from "routes/routes.config";
 
 const Navbar: FC = () => {
   const auth = getAuth();
@@ -59,9 +59,16 @@ const Navbar: FC = () => {
           >
             <MenuRounded />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <CustomLink
+            to={ROOT_ROUTE}
+            variant="h6"
+            fontWeight={600}
+            sx={{ flexGrow: 1, textDecoration: "none" }}
+            isActive
+          >
             LOGO
-          </Typography>
+          </CustomLink>
+
           {userInfo ? (
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {userInfo?.displayName}

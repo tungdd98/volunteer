@@ -12,11 +12,12 @@ import { useHistory } from "react-router-dom";
 
 import { useAppDispatch } from "app/hooks";
 import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
-import { RegisterForm } from "features/auth/auth";
 import {
+  AuthPathsEnum,
+  RegisterForm,
   initialRegisterForm,
   registerSchema,
-} from "features/auth/helpers/auth.helpers";
+} from "features/auth/auth";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
 import { ROOT_ROUTE } from "routes/routes.config";
 
@@ -35,8 +36,12 @@ const RegisterScreen: FC = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         signInWithEmailAndPassword(auth, email, password)
-          .then(() => {
-            history.push(ROOT_ROUTE);
+          .then(userCredential => {
+            if (userCredential.user.displayName) {
+              history.push(ROOT_ROUTE);
+            } else {
+              history.push(AuthPathsEnum.SIGN_UP_PERSONAL_INFO);
+            }
           })
           .catch(error => {
             handleShowSnackbar({ dispatch, error });
@@ -54,7 +59,7 @@ const RegisterScreen: FC = () => {
   return (
     <Box sx={{ py: 5 }}>
       <Box sx={{ textAlign: "center" }}>
-        <Typography variant="h1" fontSize={32} sx={{ px: 6 }}>
+        <Typography variant="h1" sx={{ px: 6 }}>
           Đăng ký
         </Typography>
 

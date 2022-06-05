@@ -2,7 +2,12 @@ import * as yup from "yup";
 
 import { DefaultMessages } from "constants/message.constants";
 
-import { AuthMessages, LoginForm, RegisterForm } from "../auth";
+import {
+  AuthMessages,
+  LoginForm,
+  RegisterForm,
+  SignUpPersonalInformationForm,
+} from "../auth";
 
 export const initialLoginForm: LoginForm = {
   email: "",
@@ -34,3 +39,9 @@ export const registerSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], AuthMessages.PASSWORD_NOT_MATCH),
 });
+
+export const initialSignUpPersonalInformationForm: SignUpPersonalInformationForm =
+  {
+    displayName: "",
+    photoURL: "",
+  };

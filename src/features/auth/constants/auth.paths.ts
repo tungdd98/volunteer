@@ -1,4 +1,5 @@
 export enum AuthPathsEnum {
   LOGIN = "/login",
-  REGISTER = "/register",
+  REGISTER = "/join",
+  SIGN_UP_PERSONAL_INFO = "/join/personal-information",
 }

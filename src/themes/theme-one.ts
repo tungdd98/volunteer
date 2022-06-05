@@ -13,7 +13,31 @@ export const themeOptions: ThemeOptions = {
     fontWeightRegular: 500,
     h1: {
       fontWeight: 600,
-      fontSize: 20,
+      fontSize: 32,
+    },
+    h2: {
+      fontWeight: 600,
+      fontSize: 24,
+    },
+  },
+  palette: {
+    primary: {
+      main: "#5e72e4",
+    },
+    secondary: {
+      main: "#f4f5f7",
+    },
+    info: {
+      main: "#11cdef",
+    },
+    success: {
+      main: "#2dce89",
+    },
+    error: {
+      main: "#f5365c",
+    },
+    warning: {
+      main: "#fb6340",
     },
   },
   shadows: [

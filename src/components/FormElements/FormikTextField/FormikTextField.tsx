@@ -33,7 +33,7 @@ const FormikTextField: FC<FormikTextFieldProps> = ({
   return (
     <Box sx={{ mb: 2 }} {...boxProps}>
       {label && (
-        <Typography sx={{ mb: 0.5, fontWeight: "fontWeightMedium" }}>
+        <Typography sx={{ mb: 0.5 }}>
           <label htmlFor={id || name}>{label}</label>
         </Typography>
       )}

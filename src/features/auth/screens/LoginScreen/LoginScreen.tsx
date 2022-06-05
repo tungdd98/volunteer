@@ -23,7 +23,12 @@ import { useAppDispatch } from "app/hooks";
 import { ReactComponent as FacebookIcon } from "assets/images/icon-facebook.svg";
 import { ReactComponent as GoogleIcon } from "assets/images/icon-google.svg";
 import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
-import { initialLoginForm, LoginForm, loginSchema } from "features/auth/auth";
+import {
+  AuthPathsEnum,
+  initialLoginForm,
+  LoginForm,
+  loginSchema,
+} from "features/auth/auth";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
 import { ROOT_ROUTE } from "routes/routes.config";
 
@@ -71,8 +76,12 @@ const LoginScreen: FC = () => {
     const { email, password } = values;
 
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        history.push(ROOT_ROUTE);
+      .then(userInfo => {
+        if (userInfo.user.displayName) {
+          history.push(ROOT_ROUTE);
+        } else {
+          history.push(AuthPathsEnum.SIGN_UP_PERSONAL_INFO);
+        }
       })
       .catch(error => {
         handleShowSnackbar({ dispatch, error });
@@ -85,7 +94,7 @@ const LoginScreen: FC = () => {
   return (
     <Box sx={{ py: 5 }}>
       <Box sx={{ textAlign: "center" }}>
-        <Typography variant="h1" fontSize={32} sx={{ px: 6 }}>
+        <Typography variant="h1" sx={{ px: 6 }}>
           Đăng nhập
         </Typography>
 
