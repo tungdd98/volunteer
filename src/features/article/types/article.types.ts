@@ -6,4 +6,6 @@ export interface ArticleDef {
   maxDonate: number;
   currentDonate: number;
   status: number;
+  albums: string[];
+  tags: string[];
 }

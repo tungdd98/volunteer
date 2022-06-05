@@ -1,25 +1,36 @@
 import React, { FC, memo } from "react";
 
-import { Paper, Box, Typography, styled, LinearProgress } from "@mui/material";
+import { Paper, Box, Typography } from "@mui/material";
+import { useHistory } from "react-router-dom";
 
+import BorderLinearProgress from "components/BorderLinearProgress/BorderLinearProgress";
 import PreviewImage from "components/PreviewImage/PreviewImage";
-import { ArticleDef } from "features/article/article";
+import { ArticleDef, ArticlePathsEnum } from "features/article/article";
 import { toCurrency } from "helpers/convert/currency";
-
-const BorderLinearProgress = styled(LinearProgress)(() => ({
-  height: 8,
-  borderRadius: 5,
-}));
 
 interface ArticleGridItemProps {
   article: ArticleDef;
 }
 
 const ArticleGridItem: FC<ArticleGridItemProps> = ({ article }) => {
+  const history = useHistory();
+
+  const redirectDetail = () => {
+    history.push(
+      ArticlePathsEnum.ARTICLE_DETAIL.replace(/:articleId/, article.id)
+    );
+  };
+
   return (
     <Paper
       elevation={10}
-      sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        cursor: "pointer",
+      }}
+      onClick={redirectDetail}
     >
       <PreviewImage src={article.thumbnail} />
 

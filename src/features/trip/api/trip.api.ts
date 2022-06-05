@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { pick } from "lodash";
+import { omit } from "lodash";
 
 import { db } from "app/firebase";
 
@@ -12,18 +12,11 @@ const getTripListApi = async (): Promise<TripDef[]> => {
   const data: TripDef[] = [];
 
   querySnapshot.forEach(doc => {
-    const item = pick(doc.data(), [
-      "title",
-      "thumbnail",
-      "content",
-      "description",
-      "startDate",
-      "endDate",
-    ]);
+    const item = omit(doc.data(), "createdAt");
     data.push({
-      id: doc.id,
       ...item,
-    });
+      id: doc.id,
+    } as TripDef);
   });
 
   return data;

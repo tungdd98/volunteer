@@ -1,5 +1,5 @@
-import { collection, getDocs } from "firebase/firestore";
-import { pick } from "lodash";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { omit } from "lodash";
 
 import { db } from "app/firebase";
 
@@ -11,24 +11,32 @@ const getArticleListApi = async (): Promise<ArticleDef[]> => {
   const querySnapshot = await getDocs(collection(db, collectionName));
   const data: ArticleDef[] = [];
 
-  querySnapshot.forEach(doc => {
-    const item = pick(doc.data(), [
-      "title",
-      "thumbnail",
-      "content",
-      "maxDonate",
-      "currentDonate",
-      "status",
-    ]);
+  querySnapshot.forEach(snap => {
+    const item = omit(snap.data(), "createdAt");
     data.push({
-      id: doc.id,
       ...item,
-    });
+      id: snap.id,
+    } as ArticleDef);
   });
 
   return data;
 };
 
+const getArticleDetailApi = async (
+  articleId: string
+): Promise<ArticleDef | null> => {
+  const docRef = doc(db, collectionName, articleId);
+  const docSnap = await getDoc(docRef);
+
+  const data = omit(docSnap.data(), "createdAt") as ArticleDef;
+
+  return {
+    ...data,
+    id: articleId,
+  };
+};
+
 export const articleApi = {
   getArticleListApi,
+  getArticleDetailApi,
 };

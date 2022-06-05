@@ -1,23 +1,12 @@
 import React, { FC, memo } from "react";
 
-import {
-  Box,
-  Button,
-  Container,
-  LinearProgress,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 
+import BorderLinearProgress from "components/BorderLinearProgress/BorderLinearProgress";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
 import { ArticleDef } from "features/article/article";
 import { toCurrency } from "helpers/convert/currency";
-
-const BorderLinearProgress = styled(LinearProgress)(() => ({
-  height: 8,
-  borderRadius: 5,
-}));
 
 interface BannerItemProps {
   banner: ArticleDef;
