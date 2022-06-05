@@ -48,7 +48,7 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <AppBar position="sticky" color="transparent">
+      <AppBar position="sticky" color="secondary">
         <Toolbar>
           <IconButton
             size="large"

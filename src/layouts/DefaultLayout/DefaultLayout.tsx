@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 
 import AppFooter from "components/AppFooter/AppFooter";
 import Navbar from "components/Navbar/Navbar";
@@ -13,7 +13,9 @@ const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Navbar />
-      <Container sx={{ flex: 1 }}>{children}</Container>
+      <Box component="main" sx={{ flex: 1 }}>
+        {children}
+      </Box>
       <AppFooter />
     </Box>
   );

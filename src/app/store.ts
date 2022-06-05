@@ -9,7 +9,9 @@ import {
   REHYDRATE,
 } from "redux-persist";
 
+import { articleReducer } from "features/article/article";
 import { authReducer } from "features/auth/auth";
+import { tripReducer } from "features/trip/trip";
 
 import { snackbarReducer } from "./snackbar.slice";
 
@@ -17,6 +19,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     snackbar: snackbarReducer,
+    article: articleReducer,
+    trip: tripReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

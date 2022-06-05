@@ -22,6 +22,12 @@ export const themeOptions: ThemeOptions = {
     h6: {
       fontWeight: 600,
     },
+    subtitle1: {
+      fontWeight: 600,
+    },
+    subtitle2: {
+      fontWeight: 600,
+    },
   },
   palette: {
     primary: {
