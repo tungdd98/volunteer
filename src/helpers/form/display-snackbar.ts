@@ -14,7 +14,7 @@ export const handleShowSnackbar = ({
   error?: {
     code: string;
   };
-}) => {
+}): void => {
   const message = error
     ? get(DefaultMessages, error.code) || "Unknown message"
     : msg;

@@ -44,6 +44,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": 1,
     "react/require-default-props": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
     "import/order": [
       "error",
       {

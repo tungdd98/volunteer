@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import { SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react/swiper-react";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import BorderLinearProgress from "components/BorderLinearProgress/BorderLinearProgress";

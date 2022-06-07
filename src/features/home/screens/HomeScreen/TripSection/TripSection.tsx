@@ -2,7 +2,7 @@
 import React, { FC, memo } from "react";
 
 import { Container, Typography } from "@mui/material";
-import { SwiperSlide } from "swiper/react";
+import { SwiperSlide } from "swiper/react/swiper-react";
 
 import { useAppSelector } from "app/hooks";
 import CustomSwiper from "components/CustomSwiper/CustomSwiper";

@@ -13,6 +13,7 @@ const Loader: FC = () => {
         justifyContent: "center",
         alignItems: "center",
         bgcolor: "white",
+        zIndex: 2000,
       }}
     >
       <CircularProgress />
