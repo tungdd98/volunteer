@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
@@ -20,7 +20,7 @@ import CustomSwiper from "components/CustomSwiper/CustomSwiper";
 import Loader from "components/Loader/Loader";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
-import { getArticleDetail } from "features/article/article";
+import { ArticlePathsEnum, getArticleDetail } from "features/article/article";
 import { toCurrency } from "helpers/convert/currency";
 
 const ArticleDetailScreen: FC = () => {
@@ -142,6 +142,8 @@ const ArticleDetailScreen: FC = () => {
           fullWidth
           size="large"
           sx={{ maxWidth: 500 }}
+          component={Link}
+          to={ArticlePathsEnum.DONATE_PROGRESS.replace(/:articleId/, articleId)}
         >
           Ủng hộ ngay
         </Button>

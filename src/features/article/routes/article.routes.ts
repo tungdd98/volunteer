@@ -20,4 +20,16 @@ const ARTICLE_DETAIL_SCREEN: RouteItem = {
   ),
 };
 
-export const ARTICLE_ROUTES = [ARTICLE_LIST_SCREEN, ARTICLE_DETAIL_SCREEN];
+const DONATE_PROGRESS_SCREEN: RouteItem = {
+  id: "donate-progress",
+  path: ArticlePathsEnum.DONATE_PROGRESS,
+  component: React.lazy(
+    () => import("../screens/DonateProgressScreen/DonateProgressScreen")
+  ),
+};
+
+export const ARTICLE_ROUTES = [
+  ARTICLE_LIST_SCREEN,
+  ARTICLE_DETAIL_SCREEN,
+  DONATE_PROGRESS_SCREEN,
+];
