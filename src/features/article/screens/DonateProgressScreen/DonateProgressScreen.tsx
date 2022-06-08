@@ -32,8 +32,13 @@ const DonateProgressScreen: FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const recipient = articleDetail?.senderAddress;
+
   const submitForm = async (values: { donate: string }) => {
-    const recipient = "cosmos1zje5enu6aap3rzcnq5mk7n4v0eva433h9x3vuu";
+    if (!recipient) {
+      return;
+    }
+
     let amount = Number(values.donate);
     console.log(values);
 
@@ -181,6 +186,7 @@ const DonateProgressScreen: FC = () => {
                     type="submit"
                     variant="contained"
                     size="large"
+                    disabled={!recipient}
                   >
                     Ủng hộ ngay {donate} ORAI
                   </Button>

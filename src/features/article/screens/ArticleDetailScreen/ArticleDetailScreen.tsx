@@ -91,36 +91,42 @@ const ArticleDetailScreen: FC = () => {
           <Typography variant="subtitle1" gutterBottom>
             Hoàn cảnh
           </Typography>
-          <Typography variant="body2">{articleDetail.content}</Typography>
+          <Box
+            dangerouslySetInnerHTML={{
+              __html: articleDetail.content,
+            }}
+          />
         </Box>
 
-        <CustomSwiper
-          slidesPerView="auto"
-          pagination={{
-            dynamicBullets: true,
-          }}
-          loop
-          autoHeight
-          breakpoints={{
-            "640": {
-              slidesPerView: 2,
-              spaceBetween: 10,
-            },
-            "1024": {
-              slidesPerView: 3,
-              spaceBetween: 10,
-            },
-          }}
-        >
-          {articleDetail.albums.map(item => (
-            <SwiperSlide key={item}>
-              <PreviewImage
-                src={item}
-                aspectRatio={AspectRatioEnum.SIXTEEN_TO_NINE}
-              />
-            </SwiperSlide>
-          ))}
-        </CustomSwiper>
+        {articleDetail.albums.length > 0 && (
+          <CustomSwiper
+            slidesPerView="auto"
+            pagination={{
+              dynamicBullets: true,
+            }}
+            loop
+            autoHeight
+            breakpoints={{
+              "640": {
+                slidesPerView: 2,
+                spaceBetween: 10,
+              },
+              "1024": {
+                slidesPerView: 3,
+                spaceBetween: 10,
+              },
+            }}
+          >
+            {articleDetail.albums.map(item => (
+              <SwiperSlide key={item}>
+                <PreviewImage
+                  src={item}
+                  aspectRatio={AspectRatioEnum.SIXTEEN_TO_NINE}
+                />
+              </SwiperSlide>
+            ))}
+          </CustomSwiper>
+        )}
       </Container>
 
       <Box
