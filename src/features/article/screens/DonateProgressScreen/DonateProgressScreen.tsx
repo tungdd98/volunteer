@@ -49,24 +49,24 @@ const DonateProgressScreen: FC = () => {
     amount *= 1000000;
     amount = Math.floor(amount);
 
-    const chainId = "osmosis-1";
+    const chainId = "Oraichain-testnet";
     await window.keplr.enable(chainId);
     const offlineSigner = window.getOfflineSigner(chainId);
     const accounts = await offlineSigner.getAccounts();
 
     const client = await SigningStargateClient.connectWithSigner(
-      "https://rpc-osmosis.blockapsis.com",
+      "https://testnet-rpc.orai.io",
       offlineSigner
     );
 
     const amountFinal = {
-      denom: "uosmo",
+      denom: "orai",
       amount: amount.toString(),
     };
     const fee = {
       amount: [
         {
-          denom: "uosmo",
+          denom: "orai",
           amount: "5000",
         },
       ],
