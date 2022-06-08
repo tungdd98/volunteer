@@ -1,9 +1,9 @@
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc, addDoc } from "firebase/firestore";
 import { omit } from "lodash";
 
 import { db } from "app/firebase";
 
-import { ArticleDef } from "../article";
+import { ArticleDef, ArticleForm } from "../article";
 
 const collectionName = "articles";
 
@@ -36,7 +36,17 @@ const getArticleDetailApi = async (
   };
 };
 
+const postArticleApi = async (data: ArticleForm): Promise<null> => {
+  await addDoc(collection(db, collectionName), {
+    ...data,
+    currentDonate: 0,
+  });
+
+  return null;
+};
+
 export const articleApi = {
   getArticleListApi,
   getArticleDetailApi,
+  postArticleApi,
 };

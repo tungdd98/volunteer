@@ -8,4 +8,12 @@ export interface ArticleDef {
   status: number;
   albums: string[];
   tags: string[];
+  senderAddress: string;
 }
+
+export type ArticleForm = Omit<
+  ArticleDef,
+  "id" | "currentDonate" | "thumbnail"
+> & {
+  thumbnail: string | File;
+};

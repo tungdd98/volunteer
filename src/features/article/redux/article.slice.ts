@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { articleApi, ArticleDef } from "../article";
+import { articleApi, ArticleDef, ArticleForm } from "../article";
 
 interface ArticleState {
   articles: ArticleDef[] | null;
@@ -27,6 +27,18 @@ export const getArticleDetail = createAsyncThunk<ArticleDef | null, string>(
     const response = await articleApi.getArticleDetailApi(articleId);
 
     return response;
+  }
+);
+
+export const postArticle = createAsyncThunk<null, ArticleForm>(
+  "article/postArticle",
+  async (data, { rejectWithValue }) => {
+    try {
+      await articleApi.postArticleApi(data);
+      return null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 

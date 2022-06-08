@@ -17,6 +17,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
+import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
 import { AUTH_ROUTE, ROOT_ROUTE } from "routes/routes.config";
 
@@ -89,6 +90,9 @@ const Navbar: FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <MenuItem component={Link} to={ArticlePathsEnum.ARTICLE_CREATE}>
+          Admin
+        </MenuItem>
         <MenuItem component={Link} to={AuthPathsEnum.MY_PROFILE}>
           Thông tin cá nhân
         </MenuItem>
