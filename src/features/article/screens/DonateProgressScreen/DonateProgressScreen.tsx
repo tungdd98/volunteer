@@ -1,7 +1,7 @@
+/* eslint-disable no-console */
 import React, { FC, useEffect, useState } from "react";
 
-import { SigningCosmosClient } from "@cosmjs/launchpad";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { assertIsBroadcastTxSuccess } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import {
   Box,
@@ -23,9 +23,6 @@ import {
   getArticleDetail,
   initialDonate,
 } from "features/article/article";
-import { handleShowSnackbar } from "helpers/form/display-snackbar";
-
-import KeplrExtensionDialog from "../../components/KeplrExtensionDialog/KeplrExtensionDialog";
 
 const DonateProgressScreen: FC = () => {
   const dispatch = useAppDispatch();
@@ -34,95 +31,63 @@ const DonateProgressScreen: FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isOpenInstallExtension, setIsOpenInstallExtension] = useState(false);
+
+  const submitForm = async (values: { donate: string }) => {
+    const recipient = "cosmos1zje5enu6aap3rzcnq5mk7n4v0eva433h9x3vuu";
+    let amount = Number(values.donate);
+    console.log(values);
+
+    if (!amount || !window.keplr || !window.getOfflineSigner) {
+      return;
+    }
+
+    amount *= 1000000;
+    amount = Math.floor(amount);
+
+    const chainId = "osmosis-1";
+    await window.keplr.enable(chainId);
+    const offlineSigner = window.getOfflineSigner(chainId);
+    const accounts = await offlineSigner.getAccounts();
+
+    const client = await SigningStargateClient.connectWithSigner(
+      "https://rpc-osmosis.blockapsis.com",
+      offlineSigner
+    );
+
+    const amountFinal = {
+      denom: "uosmo",
+      amount: amount.toString(),
+    };
+    const fee = {
+      amount: [
+        {
+          denom: "uosmo",
+          amount: "5000",
+        },
+      ],
+      gas: "200000",
+    };
+    const result = await client.sendTokens(
+      accounts[0].address,
+      recipient,
+      [amountFinal],
+      fee,
+      ""
+    );
+    assertIsBroadcastTxSuccess(result as any);
+
+    if (result.code !== undefined && result.code !== 0) {
+      console.log("Failed to send tx:", result);
+    } else {
+      console.log(`Succeed to send tx`, result);
+    }
+  };
 
   useEffect(() => {
     if (articleId) {
       dispatch(getArticleDetail(articleId)).finally(() => setIsLoading(false));
     }
   }, [articleId, dispatch]);
-
-  useEffect(() => {
-    const loadKeplr = async () => {
-      if (!window.getOfflineSigner || !window.keplr) {
-        setIsOpenInstallExtension(true);
-      } else if (window.keplr.experimentalSuggestChain) {
-        try {
-          await window.keplr.experimentalSuggestChain({
-            chainId: "osmosis-1",
-            chainName: "Osmosis mainnet",
-            rpc: "https://rpc-osmosis.blockapsis.com",
-            rest: "https://lcd-osmosis.blockapsis.com",
-            stakeCurrency: {
-              coinDenom: "OSMO",
-              coinMinimalDenom: "uosmo",
-              coinDecimals: 6,
-            },
-            bip44: {
-              coinType: 118,
-            },
-            bech32Config: {
-              bech32PrefixAccAddr: "osmo",
-              bech32PrefixAccPub: "osmopub",
-              bech32PrefixValAddr: "osmovaloper",
-              bech32PrefixValPub: "osmovaloperpub",
-              bech32PrefixConsAddr: "osmovalcons",
-              bech32PrefixConsPub: "osmovalconspub",
-            },
-            currencies: [
-              {
-                coinDenom: "OSMO",
-                coinMinimalDenom: "uosmo",
-                coinDecimals: 6,
-              },
-            ],
-            feeCurrencies: [
-              {
-                coinDenom: "OSMO",
-                coinMinimalDenom: "uosmo",
-                coinDecimals: 6,
-              },
-            ],
-            coinType: 118,
-            gasPriceStep: {
-              low: 0.01,
-              average: 0.025,
-              high: 0.04,
-            },
-          });
-        } catch {
-          handleShowSnackbar({ dispatch, msg: "Failed to suggest the chain" });
-        }
-      } else {
-        handleShowSnackbar({
-          dispatch,
-          msg: "Please use the recent version of keplr extension",
-        });
-      }
-
-      if (window.keplr) {
-        const chainId = "osmosis-1";
-
-        await window.keplr.enable(chainId);
-
-        if (window.getOfflineSigner) {
-          const offlineSigner = window.getOfflineSigner(chainId);
-
-          const accounts = await offlineSigner.getAccounts();
-
-          const cosmJS = new SigningCosmosClient(
-            "https://rpc-osmosis.blockapsis.com",
-            accounts[0].address,
-            offlineSigner
-          );
-
-          console.log(cosmJS);
-        }
-      }
-    };
-
-    loadKeplr();
-  }, [dispatch]);
 
   if (isLoading) {
     return <Loader />;
@@ -136,9 +101,7 @@ const DonateProgressScreen: FC = () => {
     <Formik
       initialValues={initialDonate}
       validationSchema={donateSchema}
-      onSubmit={() => {
-        // TODO:
-      }}
+      onSubmit={submitForm}
     >
       {({ values }) => {
         const donate = values.donate || 0;
@@ -224,8 +187,6 @@ const DonateProgressScreen: FC = () => {
                 </Form>
               </Box>
             </Box>
-
-            <KeplrExtensionDialog open={isOpenInstallExtension} />
           </Container>
         );
       }}

@@ -6,10 +6,12 @@ import { UserDef } from "../auth";
 
 interface AuthState {
   userInfo: UserDef | null;
+  senderAddress: string | null;
 }
 
 const initialState: AuthState = {
   userInfo: null,
+  senderAddress: null,
 };
 
 const authSlice = createSlice({
@@ -19,6 +21,13 @@ const authSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<UserDef | null>) => {
       state.userInfo = action.payload;
     },
+    setSenderAddress: (state, action: PayloadAction<string | null>) => {
+      state.senderAddress = action.payload;
+    },
+    logout: state => {
+      state.userInfo = null;
+      state.senderAddress = null;
+    },
   },
 });
 
@@ -27,9 +36,9 @@ export const LOCAL_STORAGE_AUTH_KEY = "auth";
 const authConfig = {
   key: LOCAL_STORAGE_AUTH_KEY,
   storage,
-  whitelist: ["userInfo"],
+  whitelist: ["userInfo", "senderAddress"],
 };
 
-export const { setUserInfo } = authSlice.actions;
+export const { setUserInfo, setSenderAddress, logout } = authSlice.actions;
 
 export const authReducer = persistReducer(authConfig, authSlice.reducer);

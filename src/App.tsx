@@ -9,6 +9,7 @@ import SwiperCore, { Pagination, Autoplay, Navigation } from "swiper";
 import { useAppDispatch } from "app/hooks";
 import { store } from "app/store";
 import CustomSnackbar from "components/CustomSnackbar/CustomSnackbar";
+import KeplrExtension from "components/KeplrExtension/KeplrExtension";
 import Loader from "components/Loader/Loader";
 import ScrollToTop from "components/ScrollToTop/ScrollToTop";
 import { LOCAL_STORAGE_AUTH_KEY, setUserInfo } from "features/auth/auth";
@@ -89,6 +90,7 @@ const App: FC = () => {
         <RouterWrapper />
         <CustomSnackbar />
         <ScrollToTop />
+        <KeplrExtension />
       </BrowserRouter>
     </ThemeProvider>
   );

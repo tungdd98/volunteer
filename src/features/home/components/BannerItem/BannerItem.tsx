@@ -1,11 +1,12 @@
 import React, { FC, memo } from "react";
 
 import { Box, Button, Container, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import BorderLinearProgress from "components/BorderLinearProgress/BorderLinearProgress";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
-import { ArticleDef } from "features/article/article";
+import { ArticleDef, ArticlePathsEnum } from "features/article/article";
 import { toCurrency } from "helpers/convert/currency";
 
 interface BannerItemProps {
@@ -49,7 +50,15 @@ const BannerItem: FC<BannerItemProps> = ({ banner }) => {
               {toCurrency(banner.currentDonate, true)} người ủng hộ
             </Typography>
           </Box>
-          <Button variant="contained" size="small">
+          <Button
+            variant="contained"
+            size="small"
+            component={Link}
+            to={ArticlePathsEnum.ARTICLE_DETAIL.replace(
+              /:articleId/,
+              banner.id
+            )}
+          >
             Ủng hộ ngay
           </Button>
         </Box>

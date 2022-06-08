@@ -5,13 +5,11 @@ import {
   AppBar,
   Avatar,
   Box,
-  Button,
   Divider,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
-  Stack,
   Toolbar,
 } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
@@ -19,7 +17,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
-import { AuthPathsEnum, setUserInfo } from "features/auth/auth";
+import { AuthPathsEnum, logout } from "features/auth/auth";
 import { AUTH_ROUTE, ROOT_ROUTE } from "routes/routes.config";
 
 const Navbar: FC = () => {
@@ -42,7 +40,7 @@ const Navbar: FC = () => {
   const handleLogout = () => {
     signOut(auth).finally(() => {
       history.push(AUTH_ROUTE);
-      dispatch(setUserInfo(null));
+      dispatch(logout());
     });
   };
 
@@ -69,7 +67,7 @@ const Navbar: FC = () => {
             LOGO
           </CustomLink>
 
-          {userInfo ? (
+          {userInfo && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {userInfo?.displayName}
               <IconButton onClick={handleOpenAccountMenu}>
@@ -80,27 +78,6 @@ const Navbar: FC = () => {
                 />
               </IconButton>
             </Box>
-          ) : (
-            <Stack spacing={1} direction="row">
-              <Button
-                color="primary"
-                variant="contained"
-                size="small"
-                component={Link}
-                to={AuthPathsEnum.LOGIN}
-              >
-                Đăng nhập
-              </Button>
-              <Button
-                color="primary"
-                variant="outlined"
-                size="small"
-                component={Link}
-                to={AuthPathsEnum.REGISTER}
-              >
-                Đăng ký
-              </Button>
-            </Stack>
           )}
         </Toolbar>
       </AppBar>

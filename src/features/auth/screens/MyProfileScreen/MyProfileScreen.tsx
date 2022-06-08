@@ -40,7 +40,11 @@ const MyProfileScreen: FC = () => {
         >
           <Box>
             <RowData content={userInfo?.displayName} variant="h6" />
-            <RowData content={userInfo?.email} variant="body2" />
+            <RowData
+              content={userInfo?.email?.replace(/@gmail.com/, "")}
+              variant="body2"
+              sx={{ wordBreak: "break-all" }}
+            />
           </Box>
           <IconButton component={Link} to={AuthPathsEnum.UPDATE_PROFILE}>
             <EditRounded color="primary" />
