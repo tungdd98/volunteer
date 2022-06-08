@@ -68,19 +68,19 @@ const KeplrExtension: FC = () => {
           // If the same chain id is already registered, it will resolve and not require the user interactions.
           await window.keplr.experimentalSuggestChain({
             // Chain-id of the Osmosis chain.
-            chainId: "osmosis-1",
+            chainId: "Oraichain-testnet",
             // The name of the chain to be displayed to the user.
-            chainName: "Osmosis mainnet",
+            chainName: "Oraichain-testnet",
             // RPC endpoint of the chain. In this case we are using blockapsis, as it's accepts connections from any host currently. No Cors limitations.
-            rpc: "https://rpc-osmosis.blockapsis.com",
+            rpc: "https://testnet-rpc.orai.io",
             // REST endpoint of the chain.
-            rest: "https://lcd-osmosis.blockapsis.com",
+            rest: "https://testnet-lcd.orai.io",
             // Staking coin information
             stakeCurrency: {
               // Coin denomination to be displayed to the user.
-              coinDenom: "OSMO",
+              coinDenom: "ORAI",
               // Actual denom (i.e. uatom, uscrt) used by the blockchain.
-              coinMinimalDenom: "uosmo",
+              coinMinimalDenom: "orai",
               // # of decimal points to convert minimal denomination to user-facing denomination.
               coinDecimals: 6,
               // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
@@ -107,20 +107,20 @@ const KeplrExtension: FC = () => {
             //   bech32PrefixConsPub: string;
             // }
             bech32Config: {
-              bech32PrefixAccAddr: "osmo",
-              bech32PrefixAccPub: "osmopub",
-              bech32PrefixValAddr: "osmovaloper",
-              bech32PrefixValPub: "osmovaloperpub",
-              bech32PrefixConsAddr: "osmovalcons",
-              bech32PrefixConsPub: "osmovalconspub",
+              bech32PrefixAccAddr: "orai",
+              bech32PrefixAccPub: "oraipub",
+              bech32PrefixValAddr: "oraivaloper",
+              bech32PrefixValPub: "oraivaloperpub",
+              bech32PrefixConsAddr: "oraivalcons",
+              bech32PrefixConsPub: "oraivalconspub",
             },
             // List of all coin/tokens used in this chain.
             currencies: [
               {
                 // Coin denomination to be displayed to the user.
-                coinDenom: "OSMO",
+                coinDenom: "ORAI",
                 // Actual denom (i.e. uatom, uscrt) used by the blockchain.
-                coinMinimalDenom: "uosmo",
+                coinMinimalDenom: "orai",
                 // # of decimal points to convert minimal denomination to user-facing denomination.
                 coinDecimals: 6,
                 // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
@@ -132,9 +132,9 @@ const KeplrExtension: FC = () => {
             feeCurrencies: [
               {
                 // Coin denomination to be displayed to the user.
-                coinDenom: "OSMO",
+                coinDenom: "ORAI",
                 // Actual denom (i.e. uosmo, uscrt) used by the blockchain.
-                coinMinimalDenom: "uosmo",
+                coinMinimalDenom: "orai",
                 // # of decimal points to convert minimal denomination to user-facing denomination.
                 coinDecimals: 6,
                 // (Optional) Keplr can show the fiat value of the coin if a coingecko id is provided.
@@ -169,7 +169,7 @@ const KeplrExtension: FC = () => {
       }
 
       if (window.keplr) {
-        const chainId = "osmosis-1";
+        const chainId = "Oraichain-testnet";
 
         await window.keplr.enable(chainId);
 
@@ -183,7 +183,7 @@ const KeplrExtension: FC = () => {
             dispatch(setSenderAddress(currentUser.address));
 
             const cosmJS = new SigningCosmosClient(
-              "https://rpc-osmosis.blockapsis.com",
+              "https://testnet-rpc.orai.io",
               currentUser.address,
               offlineSigner as any
             );
