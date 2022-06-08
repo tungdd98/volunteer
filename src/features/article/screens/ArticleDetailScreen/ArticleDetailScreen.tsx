@@ -7,6 +7,7 @@ import {
   Button,
   Chip,
   Container,
+  Hidden,
   IconButton,
   Stack,
   Typography,
@@ -54,7 +55,7 @@ const ArticleDetailScreen: FC = () => {
           aspectRatio={AspectRatioEnum.SIXTEEN_TO_NINE}
         />
 
-        <Typography variant="h1" fontSize={24} sx={{ mt: 1, mb: 2 }}>
+        <Typography variant="h1" fontSize={24} sx={{ my: 2 }}>
           {articleDetail.title}
         </Typography>
 
@@ -70,21 +71,42 @@ const ArticleDetailScreen: FC = () => {
           </Box>
         </Stack>
 
-        <Box sx={{ flexGrow: 1, my: 2 }}>
-          <Typography variant="body2" fontWeight={600}>
-            {toCurrency(articleDetail.currentDonate, true)} /{" "}
-            {toCurrency(articleDetail.maxDonate, true)} Lượt
-          </Typography>
-          <BorderLinearProgress
-            variant="determinate"
-            value={Math.floor(
-              (articleDetail.currentDonate / articleDetail.maxDonate) * 100
-            )}
-            sx={{ my: 0.5 }}
-          />
-          <Typography variant="body2">
-            {toCurrency(articleDetail.currentDonate, true)} người ủng hộ
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ flexGrow: 1, my: 2, maxWidth: 500 }}>
+            <Typography variant="body2" fontWeight={600}>
+              {toCurrency(articleDetail.currentDonate, true)} /{" "}
+              {toCurrency(articleDetail.maxDonate, true)} Lượt
+            </Typography>
+            <BorderLinearProgress
+              variant="determinate"
+              value={Math.floor(
+                (articleDetail.currentDonate / articleDetail.maxDonate) * 100
+              )}
+              sx={{ my: 0.5 }}
+            />
+            <Typography variant="body2">
+              {toCurrency(articleDetail.currentDonate, true)} người ủng hộ
+            </Typography>
+          </Box>
+          <Hidden mdDown>
+            <Button
+              variant="contained"
+              size="large"
+              component={Link}
+              to={ArticlePathsEnum.DONATE_PROGRESS.replace(
+                /:articleId/,
+                articleId
+              )}
+            >
+              Ủng hộ ngay
+            </Button>
+          </Hidden>
         </Box>
 
         <Box sx={{ mb: 5 }}>
@@ -129,31 +151,36 @@ const ArticleDetailScreen: FC = () => {
         )}
       </Container>
 
-      <Box
-        sx={{
-          position: "fixed",
-          width: "100%",
-          bottom: 0,
-          left: 0,
-          p: 2,
-          bgcolor: "white",
-          borderTop: 1,
-          borderColor: "divider",
-          zIndex: 100,
-          textAlign: "center",
-        }}
-      >
-        <Button
-          variant="contained"
-          fullWidth
-          size="large"
-          sx={{ maxWidth: 500 }}
-          component={Link}
-          to={ArticlePathsEnum.DONATE_PROGRESS.replace(/:articleId/, articleId)}
+      <Hidden mdUp>
+        <Box
+          sx={{
+            position: "fixed",
+            width: "100%",
+            bottom: 0,
+            left: 0,
+            p: 2,
+            bgcolor: "white",
+            borderTop: 1,
+            borderColor: "divider",
+            zIndex: 100,
+            textAlign: "center",
+          }}
         >
-          Ủng hộ ngay
-        </Button>
-      </Box>
+          <Button
+            variant="contained"
+            fullWidth
+            size="large"
+            sx={{ maxWidth: 500 }}
+            component={Link}
+            to={ArticlePathsEnum.DONATE_PROGRESS.replace(
+              /:articleId/,
+              articleId
+            )}
+          >
+            Ủng hộ ngay
+          </Button>
+        </Box>
+      </Hidden>
     </>
   );
 };

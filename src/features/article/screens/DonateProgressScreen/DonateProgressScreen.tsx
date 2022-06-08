@@ -25,9 +25,12 @@ import {
   donateSchema,
   getArticleDetail,
   initialDonate,
+  SCORE_ORAI,
   updateCurrentDonate,
 } from "features/article/article";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
+
+import ReceivedDialog from "../../components/ReceivedDialog/ReceivedDialog";
 
 const DonateProgressScreen: FC = () => {
   const history = useHistory();
@@ -39,6 +42,7 @@ const DonateProgressScreen: FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [totalOrai, setTotalOrai] = useState(0);
+  const [isOpenReceivedDialog, setIsOpenReceivedDialog] = useState(false);
 
   const recipient = articleDetail?.senderAddress;
 
@@ -53,7 +57,7 @@ const DonateProgressScreen: FC = () => {
       return;
     }
 
-    amount *= 1000000;
+    amount *= SCORE_ORAI;
     amount = Math.floor(amount);
 
     const chainId = "Oraichain-testnet";
@@ -130,7 +134,7 @@ const DonateProgressScreen: FC = () => {
       return total;
     }, 0);
 
-    setTotalOrai(orai / 1000000);
+    setTotalOrai(orai / SCORE_ORAI);
   }, [recipient]);
 
   useEffect(() => {
@@ -196,7 +200,10 @@ const DonateProgressScreen: FC = () => {
               <Typography variant="caption" sx={{ display: "block", mb: 2 }}>
                 {articleDetail.currentDonate} Lượt
               </Typography>
-              <Typography sx={{ textDecoration: "underline" }}>
+              <Typography
+                sx={{ textDecoration: "underline", cursor: "pointer" }}
+                onClick={() => setIsOpenReceivedDialog(true)}
+              >
                 Thống kê đã nhận: {totalOrai} ORAI
               </Typography>
               <Paper
@@ -243,6 +250,12 @@ const DonateProgressScreen: FC = () => {
                 </Form>
               </Box>
             </Box>
+
+            <ReceivedDialog
+              open={isOpenReceivedDialog}
+              onClose={() => setIsOpenReceivedDialog(false)}
+              recipient={recipient}
+            />
           </Container>
         );
       }}

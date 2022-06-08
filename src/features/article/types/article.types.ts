@@ -18,3 +18,9 @@ export type ArticleForm = Omit<
   thumbnail: string | File;
   maxDonate: string;
 };
+
+export interface ReceivedOrai {
+  fromAddress: string;
+  toAddress: string;
+  amount: string;
+}
