@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from "react";
 
-import { Box, styled } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 
 import NoImage from "assets/images/no-image.png";
 
@@ -17,6 +17,7 @@ const BasicImage = styled("img")(() => ({
   height: "100%",
   display: "block",
   objectFit: "cover",
+  margin: "auto",
 }));
 
 interface PreviewImageProps
@@ -31,6 +32,7 @@ interface PreviewImageProps
   };
   borderRadius?: string | number;
   aspectRatio?: number;
+  boxProps?: BoxProps;
 }
 
 const PreviewImage: FC<PreviewImageProps> = ({
@@ -41,6 +43,7 @@ const PreviewImage: FC<PreviewImageProps> = ({
   borderRadius = 1,
   aspectRatio,
   width,
+  boxProps,
   ...props
 }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>();
@@ -109,7 +112,7 @@ const PreviewImage: FC<PreviewImageProps> = ({
   }, [src]);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%" }} {...boxProps}>
       <BasicImage
         src={previewUrl || imageSrc || NoImage}
         alt={alt}

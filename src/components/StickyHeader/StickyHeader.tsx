@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react";
 
-import { Box, Paper, Button } from "@mui/material";
+import { Box, Paper, Button, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 
 interface StickyHeaderProps {
@@ -13,9 +13,9 @@ const StickyHeader: FC<StickyHeaderProps> = ({ linkBack, isSubmitting }) => {
     <Box
       component={Paper}
       elevation={3}
-      sx={{ px: 2, position: "sticky", top: 0, zIndex: 9 }}
+      sx={{ position: "sticky", top: 0, zIndex: 9 }}
     >
-      <Box
+      <Container
         sx={theme => ({
           maxWidth: theme.breakpoints.values.md,
           width: "100%",
@@ -41,7 +41,7 @@ const StickyHeader: FC<StickyHeaderProps> = ({ linkBack, isSubmitting }) => {
         >
           Lưu thay đổi
         </Button>
-      </Box>
+      </Container>
     </Box>
   );
 };

@@ -44,6 +44,7 @@ const App: FC = () => {
             setUserInfo({
               ...userData,
               accessToken: res.token,
+              email: userData.email?.replace(/@gmail.com/, "") || "",
             })
           );
         });

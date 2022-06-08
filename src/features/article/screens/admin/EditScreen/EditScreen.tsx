@@ -1,42 +1,49 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { Form, Formik, FormikHelpers } from "formik";
-import { useHistory } from "react-router-dom";
+import { FormikHelpers } from "formik";
+import { useHistory, useParams } from "react-router-dom";
 
-import { useAppDispatch } from "app/hooks";
-import FormEditWrapper from "components/FormEditWrapper/FormEditWrapper";
-import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
-import StickyHeader from "components/StickyHeader/StickyHeader";
-import TextEditor from "components/TextEditor/TextEditor";
-import UploadImage from "components/UploadImage/UploadImage";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import Loader from "components/Loader/Loader";
 import {
   ArticleForm,
-  articleSchema,
-  initialCreateArticle,
-  postArticle,
+  ArticlePathsEnum,
+  getArticleDetail,
+  setEditArticleForm,
+  updateArticle,
 } from "features/article/article";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
-import { ROOT_ROUTE } from "routes/routes.config";
+
+import FormEdit from "../../../components/FormEdit/FormEdit";
 
 const EditScreen: FC = () => {
   const history = useHistory();
-  const dispatch = useAppDispatch();
 
-  const createArticle = async (
+  const dispatch = useAppDispatch();
+  const { articleDetail } = useAppSelector(state => state.article);
+
+  const { articleId } = useParams<{ articleId: string }>();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleUpdateArticle = async (
     data: ArticleForm,
     thumbnail: string,
     setSubmitting: (isSubmitting: boolean) => void
   ) => {
     return dispatch(
-      postArticle({
-        ...data,
-        thumbnail,
+      updateArticle({
+        articleId,
+        data: {
+          ...data,
+          thumbnail,
+        },
       })
     )
       .catch(error => handleShowSnackbar({ error, dispatch }))
       .then(() => {
-        history.push(ROOT_ROUTE);
+        history.push(ArticlePathsEnum.ARTICLE_LIST_ADMIN);
       })
       .finally(() => setSubmitting(false));
   };
@@ -55,46 +62,31 @@ const EditScreen: FC = () => {
       );
       uploadBytes(storageRef, file).then(() => {
         getDownloadURL(storageRef).then(url => {
-          createArticle(values, url, setSubmitting);
+          handleUpdateArticle(values, url, setSubmitting);
         });
       });
     } else {
-      createArticle(values, "", setSubmitting);
+      handleUpdateArticle(values, values.thumbnail.toString(), setSubmitting);
     }
   };
 
-  return (
-    <Formik
-      initialValues={initialCreateArticle}
-      validationSchema={articleSchema}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting }) => (
-        <Form>
-          <StickyHeader linkBack={ROOT_ROUTE} isSubmitting={isSubmitting} />
-          <FormEditWrapper>
-            <FormikTextField
-              name="title"
-              fullWidth
-              label="Tiêu đề"
-              placeholder="example"
-            />
+  useEffect(() => {
+    if (articleId) {
+      dispatch(getArticleDetail(articleId)).finally(() => setIsLoading(false));
+    }
+  }, [articleId, dispatch]);
 
-            <UploadImage name="thumbnail" label="Ảnh thumbnail" width={240} />
+  if (isLoading) {
+    return <Loader />;
+  }
 
-            <TextEditor name="content" label="Nội dung bài viết" />
+  if (!articleDetail) {
+    return <div>Error...</div>;
+  }
 
-            <FormikTextField
-              name="senderAddress"
-              fullWidth
-              label="Địa chỉ ví người nhận"
-              placeholder="0xx"
-            />
-          </FormEditWrapper>
-        </Form>
-      )}
-    </Formik>
-  );
+  const initialValues = setEditArticleForm(articleDetail);
+
+  return <FormEdit initialValues={initialValues} handleSubmit={handleSubmit} />;
 };
 
 export default EditScreen;

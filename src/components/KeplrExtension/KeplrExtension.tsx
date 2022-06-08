@@ -24,7 +24,7 @@ const KeplrExtension: FC = () => {
   const history = useHistory();
 
   const dispatch = useAppDispatch();
-  const { senderAddress } = useAppSelector(state => state.auth);
+  const { senderAddress, userInfo } = useAppSelector(state => state.auth);
 
   const [isOpenInstallExtension, setIsOpenInstallExtension] = useState(false);
 
@@ -199,7 +199,10 @@ const KeplrExtension: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (senderAddress) {
+    if (
+      senderAddress &&
+      userInfo?.email?.replace(/@gmail.com/, "") !== senderAddress
+    ) {
       const email = `${senderAddress}@gmail.com`;
 
       createUserWithEmailAndPassword(auth, email, senderAddress)
@@ -210,7 +213,7 @@ const KeplrExtension: FC = () => {
           handleLogin(senderAddress, email);
         });
     }
-  }, [auth, handleLogin, senderAddress]);
+  }, [auth, handleLogin, senderAddress, userInfo?.email]);
 
   if (senderAddress) {
     return null;

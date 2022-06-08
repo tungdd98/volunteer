@@ -4,11 +4,11 @@ import { Box } from "@mui/material";
 
 import AppFooter from "components/AppFooter/AppFooter";
 
-interface DefaultLayoutProps {
+interface AdminNoSidebarProps {
   children: React.ReactNode;
 }
 
-const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
+const AdminNoSidebar: FC<AdminNoSidebarProps> = ({ children }) => {
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Box component="main" sx={{ flex: 1 }}>
@@ -19,4 +19,4 @@ const DefaultLayout: FC<DefaultLayoutProps> = ({ children }) => {
   );
 };
 
-export default DefaultLayout;
+export default AdminNoSidebar;

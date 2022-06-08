@@ -13,7 +13,8 @@ export interface ArticleDef {
 
 export type ArticleForm = Omit<
   ArticleDef,
-  "id" | "currentDonate" | "thumbnail"
+  "id" | "currentDonate" | "thumbnail" | "maxDonate"
 > & {
   thumbnail: string | File;
+  maxDonate: string;
 };

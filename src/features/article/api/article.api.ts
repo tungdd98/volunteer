@@ -1,4 +1,11 @@
-import { collection, getDocs, getDoc, doc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  addDoc,
+  runTransaction,
+} from "firebase/firestore";
 import { omit } from "lodash";
 
 import { db } from "app/firebase";
@@ -36,7 +43,7 @@ const getArticleDetailApi = async (
   };
 };
 
-const postArticleApi = async (data: ArticleForm): Promise<null> => {
+const createArticleApi = async (data: ArticleForm): Promise<null> => {
   await addDoc(collection(db, collectionName), {
     ...data,
     currentDonate: 0,
@@ -45,8 +52,44 @@ const postArticleApi = async (data: ArticleForm): Promise<null> => {
   return null;
 };
 
+const updateArticleApi = async (
+  articleId: string,
+  data: ArticleForm
+): Promise<null> => {
+  const sfDocRef = doc(db, collectionName, articleId);
+
+  await runTransaction(db, async transaction => {
+    const sfDoc = await transaction.get(sfDocRef);
+    if (sfDoc.exists()) {
+      transaction.update(sfDocRef, data);
+    }
+  });
+
+  return null;
+};
+
+const updateCurrentDonateArticleApi = async (
+  articleId: string,
+  currentDonateOld: number
+): Promise<null> => {
+  const sfDocRef = doc(db, collectionName, articleId);
+
+  await runTransaction(db, async transaction => {
+    const sfDoc = await transaction.get(sfDocRef);
+    if (sfDoc.exists()) {
+      transaction.update(sfDocRef, {
+        currentDonate: currentDonateOld + 1,
+      });
+    }
+  });
+
+  return null;
+};
+
 export const articleApi = {
   getArticleListApi,
   getArticleDetailApi,
-  postArticleApi,
+  createArticleApi,
+  updateArticleApi,
+  updateCurrentDonateArticleApi,
 };

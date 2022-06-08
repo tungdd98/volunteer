@@ -41,7 +41,7 @@ const MyProfileScreen: FC = () => {
           <Box>
             <RowData content={userInfo?.displayName} variant="h6" />
             <RowData
-              content={userInfo?.email?.replace(/@gmail.com/, "")}
+              content={userInfo?.email}
               variant="body2"
               sx={{ wordBreak: "break-all" }}
             />

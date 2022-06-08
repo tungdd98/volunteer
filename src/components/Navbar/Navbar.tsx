@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
 import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
-import { AUTH_ROUTE, ROOT_ROUTE } from "routes/routes.config";
+import { ROOT_ROUTE } from "routes/routes.config";
 
 const Navbar: FC = () => {
   const auth = getAuth();
@@ -40,7 +40,7 @@ const Navbar: FC = () => {
 
   const handleLogout = () => {
     signOut(auth).finally(() => {
-      history.push(AUTH_ROUTE);
+      history.push(ROOT_ROUTE);
       dispatch(logout());
     });
   };
@@ -82,6 +82,7 @@ const Navbar: FC = () => {
           )}
         </Toolbar>
       </AppBar>
+
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
@@ -90,8 +91,8 @@ const Navbar: FC = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem component={Link} to={ArticlePathsEnum.ARTICLE_CREATE}>
-          Admin
+        <MenuItem component={Link} to={ArticlePathsEnum.ARTICLE_LIST_ADMIN}>
+          Sự kiện ủng hộ
         </MenuItem>
         <MenuItem component={Link} to={AuthPathsEnum.MY_PROFILE}>
           Thông tin cá nhân

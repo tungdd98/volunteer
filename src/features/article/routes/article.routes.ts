@@ -4,7 +4,9 @@ import { RouteItem } from "types/route.types";
 
 import { ArticlePathsEnum } from "../article";
 
-const AdminLayout = React.lazy(() => import("layouts/AdminLayout/AdminLayout"));
+const AdminNoSidebar = React.lazy(
+  () => import("layouts/AdminNoSidebar/AdminNoSidebar")
+);
 
 const ARTICLE_LIST_SCREEN: RouteItem = {
   id: "article-list",
@@ -30,16 +32,42 @@ const DONATE_PROGRESS_SCREEN: RouteItem = {
   ),
 };
 
-const EDIT_SCREEN: RouteItem = {
-  id: "article-edit",
+const DONATE_SUCCESS_SCREEN: RouteItem = {
+  id: "donate-success",
+  path: ArticlePathsEnum.DONATE_SUCCESS,
+  component: React.lazy(
+    () => import("../screens/DonateSuccessScreen/DonateSuccessScreen")
+  ),
+};
+
+const CREATE_SCREEN: RouteItem = {
+  id: "article-create-admin",
   path: ArticlePathsEnum.ARTICLE_CREATE,
+  component: React.lazy(
+    () => import("../screens/admin/CreateScreen/CreateScreen")
+  ),
+  layout: AdminNoSidebar,
+};
+
+const EDIT_SCREEN: RouteItem = {
+  id: "article-edit-admin",
+  path: ArticlePathsEnum.ARTICLE_EDIT,
   component: React.lazy(() => import("../screens/admin/EditScreen/EditScreen")),
-  layout: AdminLayout,
+  layout: AdminNoSidebar,
+};
+
+const LIST_SCREEN: RouteItem = {
+  id: "article-list-admin",
+  path: ArticlePathsEnum.ARTICLE_LIST_ADMIN,
+  component: React.lazy(() => import("../screens/admin/ListScreen/ListScreen")),
 };
 
 export const ARTICLE_ROUTES = [
   ARTICLE_LIST_SCREEN,
   ARTICLE_DETAIL_SCREEN,
   DONATE_PROGRESS_SCREEN,
+  CREATE_SCREEN,
+  LIST_SCREEN,
   EDIT_SCREEN,
+  DONATE_SUCCESS_SCREEN,
 ];

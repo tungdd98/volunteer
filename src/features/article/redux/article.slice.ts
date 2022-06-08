@@ -30,11 +30,41 @@ export const getArticleDetail = createAsyncThunk<ArticleDef | null, string>(
   }
 );
 
-export const postArticle = createAsyncThunk<null, ArticleForm>(
-  "article/postArticle",
+export const createArticle = createAsyncThunk<null, ArticleForm>(
+  "article/createArticle",
   async (data, { rejectWithValue }) => {
     try {
-      await articleApi.postArticleApi(data);
+      await articleApi.createArticleApi(data);
+      return null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const updateArticle = createAsyncThunk<
+  null,
+  { articleId: string; data: ArticleForm }
+>("article/updateArticle", async ({ data, articleId }, { rejectWithValue }) => {
+  try {
+    await articleApi.updateArticleApi(articleId, data);
+    return null;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
+export const updateCurrentDonate = createAsyncThunk<
+  null,
+  { articleId: string; currentDonateOld: number }
+>(
+  "article/updateCurrentDonate",
+  async ({ currentDonateOld, articleId }, { rejectWithValue }) => {
+    try {
+      await articleApi.updateCurrentDonateArticleApi(
+        articleId,
+        currentDonateOld
+      );
       return null;
     } catch (error) {
       return rejectWithValue(error);

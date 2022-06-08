@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 
 import { assertIsBroadcastTxSuccess } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
@@ -11,26 +11,34 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import { Form, Formik } from "formik";
-import { useParams } from "react-router-dom";
+import { get } from "lodash";
+import { useHistory, useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
 import Loader from "components/Loader/Loader";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import {
+  ArticlePathsEnum,
   donateSchema,
   getArticleDetail,
   initialDonate,
+  updateCurrentDonate,
 } from "features/article/article";
+import { handleShowSnackbar } from "helpers/form/display-snackbar";
 
 const DonateProgressScreen: FC = () => {
+  const history = useHistory();
+
   const dispatch = useAppDispatch();
   const { articleDetail } = useAppSelector(state => state.article);
 
   const { articleId } = useParams<{ articleId: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [totalOrai, setTotalOrai] = useState(0);
 
   const recipient = articleDetail?.senderAddress;
 
@@ -40,7 +48,6 @@ const DonateProgressScreen: FC = () => {
     }
 
     let amount = Number(values.donate);
-    console.log(values);
 
     if (!amount || !window.keplr || !window.getOfflineSigner) {
       return;
@@ -54,45 +61,87 @@ const DonateProgressScreen: FC = () => {
     const offlineSigner = window.getOfflineSigner(chainId);
     const accounts = await offlineSigner.getAccounts();
 
-    const client = await SigningStargateClient.connectWithSigner(
-      "https://testnet-rpc.orai.io",
-      offlineSigner
-    );
+    try {
+      const client = await SigningStargateClient.connectWithSigner(
+        "https://testnet-rpc.orai.io",
+        offlineSigner
+      );
 
-    const amountFinal = {
-      denom: "orai",
-      amount: amount.toString(),
-    };
-    const fee = {
-      amount: [
-        {
-          denom: "orai",
-          amount: "5000",
-        },
-      ],
-      gas: "200000",
-    };
-    const result = await client.sendTokens(
-      accounts[0].address,
-      recipient,
-      [amountFinal],
-      fee,
-      ""
-    );
-    assertIsBroadcastTxSuccess(result as any);
+      const amountFinal = {
+        denom: "orai",
+        amount: amount.toString(),
+      };
+      const fee = {
+        amount: [
+          {
+            denom: "orai",
+            amount: "5000",
+          },
+        ],
+        gas: "200000",
+      };
+      const result = await client.sendTokens(
+        accounts[0].address,
+        recipient,
+        [amountFinal],
+        fee,
+        ""
+      );
+      assertIsBroadcastTxSuccess(result as any);
 
-    if (result.code !== undefined && result.code !== 0) {
-      console.log("Failed to send tx:", result);
-    } else {
-      console.log(`Succeed to send tx`, result);
+      if (result.code !== undefined && result.code !== 0) {
+        console.log("Failed to send tx:", result);
+      } else {
+        console.log(`Succeed to send tx`, result);
+        dispatch(
+          updateCurrentDonate({
+            articleId,
+            currentDonateOld: articleDetail?.currentDonate,
+          })
+        );
+        history.push(
+          ArticlePathsEnum.DONATE_SUCCESS.replace(/:articleId/, articleId),
+          values.donate
+        );
+      }
+    } catch {
+      handleShowSnackbar({ dispatch, msg: "Not found key" });
     }
   };
+
+  const getTotalOrai = useCallback(async () => {
+    if (!recipient) {
+      return;
+    }
+    const response = await axios.get(
+      `https://testnet-lcd.orai.io/cosmos/tx/v1beta1/txs?events=transfer.recipient%3D%27${recipient}%27`
+    );
+
+    const data = get(response.data, "txs") as unknown[];
+    const orai = data.reduce((total: number, item) => {
+      const message = get(item, "body.messages[0]");
+      const type = get(message, "@type");
+      const amount = get(message, "amount[0].amount");
+
+      if (type === "/cosmos.bank.v1beta1.MsgSend") {
+        return total + Number(amount);
+      }
+
+      return total;
+    }, 0);
+
+    setTotalOrai(orai / 1000000);
+  }, [recipient]);
 
   useEffect(() => {
     if (articleId) {
       dispatch(getArticleDetail(articleId)).finally(() => setIsLoading(false));
     }
   }, [articleId, dispatch]);
+
+  useEffect(() => {
+    getTotalOrai();
+  }, [getTotalOrai]);
 
   if (isLoading) {
     return <Loader />;
@@ -107,6 +156,8 @@ const DonateProgressScreen: FC = () => {
       initialValues={initialDonate}
       validationSchema={donateSchema}
       onSubmit={submitForm}
+      validateOnBlur={false}
+      validateOnChange={false}
     >
       {({ values }) => {
         const donate = values.donate || 0;
@@ -115,13 +166,12 @@ const DonateProgressScreen: FC = () => {
           <Container sx={{ pt: 3 }} maxWidth="sm">
             <Box
               sx={{
-                borderRadius: "50% 50% 47% 53% / 30% 30% 70% 70%",
-                height: "60vh",
+                borderRadius: "50%",
+                height: 500,
                 bgcolor: "primary.dark",
                 position: "fixed",
-                width: "100%",
+                width: 500,
                 top: "-10%",
-                maxWidth: 500,
                 margin: "auto",
                 left: "50%",
                 transform: "translateX(-50%)",
@@ -147,7 +197,7 @@ const DonateProgressScreen: FC = () => {
                 {articleDetail.currentDonate} Lượt
               </Typography>
               <Typography sx={{ textDecoration: "underline" }}>
-                Thống kê đã nhận: 20 ORAI
+                Thống kê đã nhận: {totalOrai} ORAI
               </Typography>
               <Paper
                 sx={{
