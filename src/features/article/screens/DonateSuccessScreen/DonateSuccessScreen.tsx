@@ -56,9 +56,7 @@ const DonateSuccessScreen: FC = () => {
       <PreviewImage
         src="https://img.icons8.com/external-filled-line-rakhmat-setiawan/64/undefined/external-autumn-thanksgiving-filled-line-filled-line-rakhmat-setiawan.png"
         width={64}
-        boxProps={{
-          sx: { mx: "auto" },
-        }}
+        isCenter
       />
 
       <Typography sx={{ mt: 3, px: 2 }} variant="h4" fontSize={24}>

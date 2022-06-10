@@ -3,4 +3,6 @@ export const DefaultMessages = {
   "auth/wrong-password": "Mật khẩu không đúng",
   "auth/email-already-in-use": "Tài khoản đã được đăng ký",
   REQUIRED: "Trường bắt buộc, không được để trống",
+  DUPLICATE_TAG: "123",
+  MAX_LENGTH_TAG: "123",
 };

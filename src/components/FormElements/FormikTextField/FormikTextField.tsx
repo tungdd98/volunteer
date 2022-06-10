@@ -10,7 +10,7 @@ import {
 import { Field, useFormikContext } from "formik";
 import { get } from "lodash";
 
-interface FormikTextFieldProps extends Omit<TextFieldProps, "name"> {
+export interface FormikTextFieldProps extends Omit<TextFieldProps, "name"> {
   name: string;
   boxProps?: BoxProps;
 }

@@ -17,7 +17,6 @@ const BasicImage = styled("img")(() => ({
   height: "100%",
   display: "block",
   objectFit: "cover",
-  margin: "auto",
 }));
 
 interface PreviewImageProps
@@ -33,6 +32,7 @@ interface PreviewImageProps
   borderRadius?: string | number;
   aspectRatio?: number;
   boxProps?: BoxProps;
+  isCenter?: boolean;
 }
 
 const PreviewImage: FC<PreviewImageProps> = ({
@@ -44,6 +44,7 @@ const PreviewImage: FC<PreviewImageProps> = ({
   aspectRatio,
   width,
   boxProps,
+  isCenter,
   ...props
 }) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>();
@@ -120,6 +121,7 @@ const PreviewImage: FC<PreviewImageProps> = ({
         sx={{
           borderRadius,
           width: width || "100%",
+          mx: isCenter ? "auto" : "",
         }}
         onError={({ currentTarget }) => {
           currentTarget.onerror = null;
