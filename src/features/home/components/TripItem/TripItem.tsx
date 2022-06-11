@@ -12,7 +12,7 @@ interface TripItemProps {
 
 const TripItem: FC<TripItemProps> = ({ trip }) => {
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 1 }}>
       <Paper elevation={5} sx={{ p: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={5}>

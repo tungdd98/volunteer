@@ -14,7 +14,7 @@ const TripSection: FC = () => {
 
   return (
     <Container sx={{ mt: 5 }}>
-      <Typography variant="h6" gutterBottom textTransform="uppercase">
+      <Typography variant="h6" sx={{ mb: 2 }} textTransform="uppercase">
         Chuyến đi thiện nguyện
       </Typography>
 

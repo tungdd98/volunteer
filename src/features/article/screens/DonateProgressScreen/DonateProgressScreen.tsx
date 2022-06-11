@@ -175,7 +175,7 @@ const DonateProgressScreen: FC = () => {
                 borderRadius: "50%",
                 height: 500,
                 bgcolor: "primary.dark",
-                position: "fixed",
+                position: "absolute",
                 width: 500,
                 top: "-10%",
                 margin: "auto",

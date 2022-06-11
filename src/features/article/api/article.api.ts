@@ -5,8 +5,9 @@ import {
   doc,
   addDoc,
   runTransaction,
+  query,
+  where,
 } from "firebase/firestore";
-import { omit } from "lodash";
 
 import { db } from "app/firebase";
 
@@ -19,7 +20,7 @@ const getArticleListApi = async (): Promise<ArticleDef[]> => {
   const data: ArticleDef[] = [];
 
   querySnapshot.forEach(snap => {
-    const item = omit(snap.data(), "createdAt");
+    const item = snap.data();
     data.push({
       ...item,
       id: snap.id,
@@ -35,7 +36,7 @@ const getArticleDetailApi = async (
   const docRef = doc(db, collectionName, articleId);
   const docSnap = await getDoc(docRef);
 
-  const data = omit(docSnap.data(), "createdAt") as ArticleDef;
+  const data = docSnap.data() as ArticleDef;
 
   return {
     ...data,
@@ -86,10 +87,32 @@ const updateCurrentDonateArticleApi = async (
   return null;
 };
 
+const getArticleListByCategoryIdApi = async (
+  categoryId: string
+): Promise<ArticleDef[]> => {
+  const q = query(
+    collection(db, collectionName),
+    where("categoryId", "==", categoryId)
+  );
+  const querySnapshot = await getDocs(q);
+  const data: ArticleDef[] = [];
+
+  querySnapshot.forEach(snap => {
+    const item = snap.data();
+    data.push({
+      ...item,
+      id: snap.id,
+    } as ArticleDef);
+  });
+
+  return data;
+};
+
 export const articleApi = {
   getArticleListApi,
   getArticleDetailApi,
   createArticleApi,
   updateArticleApi,
   updateCurrentDonateArticleApi,
+  getArticleListByCategoryIdApi,
 };

@@ -1,68 +1,23 @@
 import React, { FC, memo } from "react";
 
-import { Box, Button, Container, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
 
-import BorderLinearProgress from "components/BorderLinearProgress/BorderLinearProgress";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
-import { ArticleDef, ArticlePathsEnum } from "features/article/article";
-import { toCurrency } from "helpers/convert/currency";
+import { BannerDef } from "features/banner/banner";
 
 interface BannerItemProps {
-  banner: ArticleDef;
+  banner: BannerDef;
 }
 
 const BannerItem: FC<BannerItemProps> = ({ banner }) => {
   return (
     <Box>
       <PreviewImage
-        aspectRatio={AspectRatioEnum.SIXTEEN_TO_NINE}
+        aspectRatio={AspectRatioEnum.TEN_TO_FOUR}
         src={banner.thumbnail}
-        alt={banner.title}
         borderRadius={0}
       />
-
-      <Container sx={{ px: 2, py: 1 }} maxWidth="sm">
-        <Typography variant="subtitle1">{banner.title}</Typography>
-        <Box
-          sx={{
-            mt: 1,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            maxWidth: 500,
-          }}
-        >
-          <Box sx={{ flexGrow: 1, pr: 2 }}>
-            <Typography variant="body2" fontWeight={600}>
-              {toCurrency(banner.currentDonate, true)} /{" "}
-              {toCurrency(banner.maxDonate, true)} Lượt
-            </Typography>
-            <BorderLinearProgress
-              variant="determinate"
-              value={Math.floor(
-                (banner.currentDonate / banner.maxDonate) * 100
-              )}
-              sx={{ my: 0.5 }}
-            />
-            <Typography variant="body2">
-              {toCurrency(banner.currentDonate, true)} người ủng hộ
-            </Typography>
-          </Box>
-          <Button
-            variant="contained"
-            size="small"
-            component={Link}
-            to={ArticlePathsEnum.ARTICLE_DETAIL.replace(
-              /:articleId/,
-              banner.id
-            )}
-          >
-            Ủng hộ ngay
-          </Button>
-        </Box>
-      </Container>
     </Box>
   );
 };

@@ -1,15 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { articleApi, ArticleDef, ArticleForm } from "../article";
+import { CategoryDef } from "features/category/category";
+
+import {
+  articleApi,
+  ArticleDef,
+  ArticleForm,
+  CategoryArticleDef,
+} from "../article";
 
 interface ArticleState {
   articles: ArticleDef[] | null;
   articleDetail: ArticleDef | null;
+  articlesInfo: Record<string, CategoryArticleDef>;
 }
 
 const initialState: ArticleState = {
   articles: null,
   articleDetail: null,
+  articlesInfo: {},
 };
 
 export const getArticleList = createAsyncThunk<ArticleDef[]>(
@@ -72,6 +81,15 @@ export const updateCurrentDonate = createAsyncThunk<
   }
 );
 
+export const getArticleListByCategoryId = createAsyncThunk<
+  ArticleDef[],
+  CategoryDef
+>("article/getArticleListByCategoryId", async category => {
+  const response = await articleApi.getArticleListByCategoryIdApi(category.id);
+
+  return response;
+});
+
 const articleSlice = createSlice({
   name: "article",
   initialState,
@@ -85,6 +103,17 @@ const articleSlice = createSlice({
     });
     builder.addCase(getArticleDetail.rejected, state => {
       state.articleDetail = null;
+    });
+    builder.addCase(getArticleListByCategoryId.fulfilled, (state, action) => {
+      const category = action.meta.arg;
+
+      state.articlesInfo = {
+        ...state.articlesInfo,
+        [category.id]: {
+          title: category.title,
+          articles: action.payload,
+        },
+      };
     });
   },
 });

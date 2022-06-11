@@ -24,3 +24,8 @@ export interface ReceivedOrai {
   toAddress: string;
   amount: string;
 }
+
+export interface CategoryArticleDef {
+  title: string;
+  articles: ArticleDef[];
+}
