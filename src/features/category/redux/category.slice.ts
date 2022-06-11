@@ -42,6 +42,21 @@ export const createCategory = createAsyncThunk<null, CategoryRequest>(
   }
 );
 
+export const updateCategory = createAsyncThunk<
+  null,
+  { categoryId: string; data: CategoryRequest }
+>(
+  "category/updateCategory",
+  async ({ data, categoryId }, { rejectWithValue }) => {
+    try {
+      await categoryApi.updateCategoryApi(categoryId, data);
+      return null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const categorySlice = createSlice({
   name: "category",
   initialState,

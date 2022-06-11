@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  runTransaction,
+} from "firebase/firestore";
 
 import { db } from "app/firebase";
 
@@ -41,8 +48,25 @@ const createCategoryApi = async (data: CategoryRequest): Promise<null> => {
   return null;
 };
 
+const updateCategoryApi = async (
+  articleId: string,
+  data: CategoryRequest
+): Promise<null> => {
+  const sfDocRef = doc(db, collectionName, articleId);
+
+  await runTransaction(db, async transaction => {
+    const sfDoc = await transaction.get(sfDocRef);
+    if (sfDoc.exists()) {
+      transaction.update(sfDocRef, data);
+    }
+  });
+
+  return null;
+};
+
 export const categoryApi = {
   getCategoryListApi,
   getCategoryDetailApi,
   createCategoryApi,
+  updateCategoryApi,
 };

@@ -25,4 +25,17 @@ const ADMIN_CREATE_SCREEN: RouteItem = {
   layout: AdminNoSidebar,
 };
 
-export const CATEGORY_ROUTES = [ADMIN_LIST_SCREEN, ADMIN_CREATE_SCREEN];
+const ADMIN_EDIT_SCREEN: RouteItem = {
+  id: "category-edit-admin",
+  path: CategoryPathsEnum.ADMIN_EDIT,
+  component: React.lazy(
+    () => import("../screens/admin/CategoryEditScreen/CategoryEditScreen")
+  ),
+  layout: AdminNoSidebar,
+};
+
+export const CATEGORY_ROUTES = [
+  ADMIN_LIST_SCREEN,
+  ADMIN_CREATE_SCREEN,
+  ADMIN_EDIT_SCREEN,
+];
