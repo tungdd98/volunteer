@@ -19,6 +19,7 @@ const UpdateProfileScreen: FC = () => {
     {
       displayName: userInfo?.displayName || "",
       photoURL: userInfo?.photoURL || "",
+      personalCode: null,
     }
   );
 

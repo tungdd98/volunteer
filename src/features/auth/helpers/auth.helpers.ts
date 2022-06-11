@@ -44,4 +44,5 @@ export const initialSignUpPersonalInformationForm: SignUpPersonalInformationForm
   {
     displayName: "",
     photoURL: "",
+    personalCode: null,
   };

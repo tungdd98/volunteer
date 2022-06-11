@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { pick, get } from "lodash";
 import { BrowserRouter } from "react-router-dom";
@@ -12,7 +13,11 @@ import CustomSnackbar from "components/CustomSnackbar/CustomSnackbar";
 import KeplrExtension from "components/KeplrExtension/KeplrExtension";
 import Loader from "components/Loader/Loader";
 import ScrollToTop from "components/ScrollToTop/ScrollToTop";
-import { LOCAL_STORAGE_AUTH_KEY, setUserInfo } from "features/auth/auth";
+import {
+  getAccountDetail,
+  LOCAL_STORAGE_AUTH_KEY,
+  setUserInfo,
+} from "features/auth/auth";
 import { deepParseJson } from "helpers/convert/deep-parse-json";
 import RouterWrapper from "routes/RouterWrapper";
 
@@ -40,13 +45,19 @@ const App: FC = () => {
             "email",
             "uid",
           ]);
-          dispatch(
-            setUserInfo({
-              ...userData,
-              accessToken: res.token,
-              email: userData.email?.replace(/@gmail.com/, "") || "",
-            })
-          );
+
+          dispatch(getAccountDetail(userData.uid))
+            .then(unwrapResult)
+            .then(account => {
+              dispatch(
+                setUserInfo({
+                  ...userData,
+                  accessToken: res.token,
+                  email: userData.email?.replace(/@gmail.com/, "") || "",
+                  codeInfo: account,
+                })
+              );
+            });
         });
       }
 
