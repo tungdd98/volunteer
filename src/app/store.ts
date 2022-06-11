@@ -13,6 +13,7 @@ import { articleReducer } from "features/article/article";
 import { authReducer } from "features/auth/auth";
 import { bannerReducer } from "features/banner/banner";
 import { categoryReducer } from "features/category/category";
+import { transactionReducer } from "features/transaction/transaction";
 import { tripReducer } from "features/trip/trip";
 
 import { snackbarReducer } from "./snackbar.slice";
@@ -25,6 +26,7 @@ export const store = configureStore({
     trip: tripReducer,
     banner: bannerReducer,
     category: categoryReducer,
+    transaction: transactionReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -29,6 +29,7 @@ import {
   updateCurrentDonate,
 } from "features/article/article";
 import { AuthPathsEnum } from "features/auth/auth";
+import { createTransaction } from "features/transaction/transaction";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
 
 import ReceivedDialog from "../../components/ReceivedDialog/ReceivedDialog";
@@ -112,6 +113,17 @@ const DonateProgressScreen: FC = () => {
             currentDonateOld: articleDetail?.currentDonate,
           })
         );
+        if (userInfo) {
+          dispatch(
+            createTransaction({
+              uid: userInfo.uid,
+              toAddress: recipient,
+              createdAt: new Date().toString(),
+              orai: amount.toString(),
+            })
+          );
+        }
+
         history.push(
           ArticlePathsEnum.DONATE_SUCCESS.replace(/:articleId/, articleId),
           values.donate

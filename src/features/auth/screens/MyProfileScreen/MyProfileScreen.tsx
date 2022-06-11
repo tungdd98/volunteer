@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import {
   EditRounded,
@@ -13,21 +13,55 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
-import { useAppSelector } from "app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import Loader from "components/Loader/Loader";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import RowData from "components/RowData/RowData";
 import { AuthPathsEnum } from "features/auth/auth";
+import { getTransactionListByUid } from "features/transaction/transaction";
+import { ROOT_ROUTE } from "routes/routes.config";
+
+import TransactionDetailDialog from "../../components/TransactionDetailDialog/TransactionDetailDialog";
 
 const MyProfileScreen: FC = () => {
+  const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(state => state.auth);
+  const { transactions } = useAppSelector(state => state.transaction);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const totalVolunteers = new Set(
+    transactions?.map(item => item.toAddress) || []
+  ).size;
+  const totalOrai = transactions?.reduce((total, item) => {
+    const t = total + Number(item.orai);
+    return t;
+  }, 0);
+
+  useEffect(() => {
+    if (userInfo?.uid) {
+      dispatch(getTransactionListByUid(userInfo.uid)).finally(() =>
+        setIsLoading(false)
+      );
+    }
+  }, [dispatch, userInfo?.uid]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (!userInfo) {
+    return <Redirect to={ROOT_ROUTE} />;
+  }
 
   return (
     <Container maxWidth="sm" sx={{ py: 3 }}>
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={3}>
-          <PreviewImage src={userInfo?.photoURL || ""} borderRadius="50%" />
+          <PreviewImage src={userInfo.photoURL || ""} borderRadius="50%" />
         </Grid>
         <Grid
           item
@@ -39,9 +73,9 @@ const MyProfileScreen: FC = () => {
           }}
         >
           <Box>
-            <RowData content={userInfo?.displayName} variant="h6" />
+            <RowData content={userInfo.displayName} variant="h6" />
             <RowData
-              content={userInfo?.email}
+              content={userInfo.email}
               variant="body2"
               sx={{ wordBreak: "break-all" }}
             />
@@ -56,7 +90,7 @@ const MyProfileScreen: FC = () => {
         <Grid item xs={6}>
           <Paper elevation={10} sx={{ p: 1, bgcolor: "info.light" }}>
             <Typography fontWeight={600} sx={{ mb: 1 }}>
-              100
+              {totalVolunteers}
             </Typography>
             <Typography variant="body2">Hoàn cảnh ủng hộ</Typography>
           </Paper>
@@ -64,7 +98,7 @@ const MyProfileScreen: FC = () => {
         <Grid item xs={6}>
           <Paper elevation={10} sx={{ p: 1, bgcolor: "info.light" }}>
             <Typography fontWeight={600} sx={{ mb: 1 }}>
-              120 ORAI
+              {totalOrai} ORAI
             </Typography>
             <Typography variant="body2">Số ORAI ủng hộ</Typography>
           </Paper>
@@ -80,15 +114,18 @@ const MyProfileScreen: FC = () => {
               alignItems: "center",
               cursor: "pointer",
             }}
+            onClick={() => setIsOpen(true)}
           >
             <StarsRounded />
             <Typography sx={{ pl: 1 }} variant="body2">
-              Thành tựu đạt được
+              Danh sách chi tiết
             </Typography>
             <KeyboardArrowRightRounded sx={{ ml: "auto" }} />
           </Paper>
         </Grid>
       </Grid>
+
+      <TransactionDetailDialog open={isOpen} onClose={() => setIsOpen(false)} />
     </Container>
   );
 };
