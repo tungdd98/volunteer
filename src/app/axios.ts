@@ -29,7 +29,7 @@ const errorInterceptor = (axiosError: AxiosError) => {
 };
 /** Setup an API instance */
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_IMAGE,
+  baseURL: process.env.REACT_APP_IMAGE || "http://54.251.16.121/",
   headers: {
     "Content-Type": "application/json",
   },

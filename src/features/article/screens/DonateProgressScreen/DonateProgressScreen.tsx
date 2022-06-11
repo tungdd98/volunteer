@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import { Form, Formik } from "formik";
 import { get } from "lodash";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
@@ -28,6 +28,7 @@ import {
   SCORE_ORAI,
   updateCurrentDonate,
 } from "features/article/article";
+import { AuthPathsEnum } from "features/auth/auth";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
 
 import ReceivedDialog from "../../components/ReceivedDialog/ReceivedDialog";
@@ -37,6 +38,7 @@ const DonateProgressScreen: FC = () => {
 
   const dispatch = useAppDispatch();
   const { articleDetail } = useAppSelector(state => state.article);
+  const { userInfo } = useAppSelector(state => state.auth);
 
   const { articleId } = useParams<{ articleId: string }>();
 
@@ -243,10 +245,26 @@ const DonateProgressScreen: FC = () => {
                     type="submit"
                     variant="contained"
                     size="large"
-                    disabled={!recipient}
+                    disabled={!recipient || !userInfo?.codeInfo}
                   >
                     Ủng hộ ngay {donate} ORAI
                   </Button>
+
+                  {!userInfo?.codeInfo && (
+                    <Box sx={{ mt: 3 }}>
+                      <Typography variant="caption" color="GrayText">
+                        *Vui lòng xác thực danh tính để ủng hộ.
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="primary"
+                        component={Link}
+                        to={AuthPathsEnum.UPDATE_PROFILE}
+                      >
+                        Xác thực ngay
+                      </Typography>
+                    </Box>
+                  )}
                 </Form>
               </Box>
             </Box>
