@@ -31,7 +31,7 @@ const TransactionDetailDialog: FC<TransactionDetailDialogProps> = ({
   const { transactions } = useAppSelector(state => state.transaction);
 
   return (
-    <Dialog open={open} maxWidth="sm" fullWidth>
+    <Dialog open={open} maxWidth="md" fullWidth>
       <DialogTitle gutterBottom>Danh sách chi tiết</DialogTitle>
       <DialogContent>
         <TableContainer component={Paper} elevation={10}>
