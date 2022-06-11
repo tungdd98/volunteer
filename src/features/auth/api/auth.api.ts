@@ -34,7 +34,7 @@ const getAccountDetailApi = async (uid: string): Promise<Account | null> => {
     data.push(docS.data() as Account);
   });
 
-  return data[0];
+  return data.length > 0 ? data[0] : null;
 };
 
 export const authApi = {
