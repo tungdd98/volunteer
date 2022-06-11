@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { CategoryDef, categoryApi } from "../category";
+import { CategoryDef, categoryApi, CategoryRequest } from "../category";
 
 interface CategoryState {
   categories: CategoryDef[] | null;
@@ -27,6 +27,18 @@ export const getCategoryDetail = createAsyncThunk<CategoryDef | null, string>(
     const response = await categoryApi.getCategoryDetailApi(categoryId);
 
     return response;
+  }
+);
+
+export const createCategory = createAsyncThunk<null, CategoryRequest>(
+  "category/createCategory",
+  async (data, { rejectWithValue }) => {
+    try {
+      await categoryApi.createCategoryApi(data);
+      return null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 

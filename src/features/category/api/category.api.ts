@@ -1,8 +1,8 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 import { db } from "app/firebase";
 
-import { CategoryDef } from "../category";
+import { CategoryDef, CategoryRequest } from "../category";
 
 const collectionName = "categories";
 
@@ -35,7 +35,14 @@ const getCategoryDetailApi = async (
   };
 };
 
+const createCategoryApi = async (data: CategoryRequest): Promise<null> => {
+  await addDoc(collection(db, collectionName), data);
+
+  return null;
+};
+
 export const categoryApi = {
   getCategoryListApi,
   getCategoryDetailApi,
+  createCategoryApi,
 };

@@ -9,9 +9,9 @@ import {
   ArticleForm,
   initialCreateArticle,
   createArticle,
+  ArticlePathsEnum,
 } from "features/article/article";
 import { handleShowSnackbar } from "helpers/form/display-snackbar";
-import { ROOT_ROUTE } from "routes/routes.config";
 
 import FormEdit from "../../../components/FormEdit/FormEdit";
 
@@ -32,7 +32,7 @@ const CreateScreen: FC = () => {
     )
       .catch(error => handleShowSnackbar({ error, dispatch }))
       .then(() => {
-        history.push(ROOT_ROUTE);
+        history.push(ArticlePathsEnum.ARTICLE_LIST_ADMIN);
       })
       .finally(() => setSubmitting(false));
   };
