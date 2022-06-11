@@ -13,6 +13,7 @@ import CustomSnackbar from "components/CustomSnackbar/CustomSnackbar";
 import KeplrExtension from "components/KeplrExtension/KeplrExtension";
 import Loader from "components/Loader/Loader";
 import ScrollToTop from "components/ScrollToTop/ScrollToTop";
+import { getProvinces } from "features/article/article";
 import {
   getAccountDetail,
   LOCAL_STORAGE_AUTH_KEY,
@@ -90,6 +91,10 @@ const App: FC = () => {
       window.removeEventListener("storage", listenStorage);
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(getProvinces());
+  }, [dispatch]);
 
   if (isLoading) {
     return <Loader />;

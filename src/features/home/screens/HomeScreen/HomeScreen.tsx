@@ -28,8 +28,12 @@ const HomeScreen: FC = () => {
 
   useEffect(() => {
     if (categories) {
-      categories.forEach(item => {
-        dispatch(getArticleListByCategoryId(item));
+      categories.forEach(category => {
+        dispatch(
+          getArticleListByCategoryId({
+            category,
+          })
+        );
       });
     }
   }, [categories, dispatch]);

@@ -26,6 +26,16 @@ export interface ReceivedOrai {
 }
 
 export interface CategoryArticleDef {
+  id: string;
   title: string;
   articles: ArticleDef[];
+}
+
+export interface ProvinceDef {
+  code: string;
+  name: string;
+}
+
+export interface ArticleParams {
+  provinceCode: string;
 }

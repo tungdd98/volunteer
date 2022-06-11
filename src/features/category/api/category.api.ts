@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 import { db } from "app/firebase";
 
@@ -21,6 +21,21 @@ const getCategoryListApi = async (): Promise<CategoryDef[]> => {
   return data;
 };
 
+const getCategoryDetailApi = async (
+  categoryId: string
+): Promise<CategoryDef | null> => {
+  const docRef = doc(db, collectionName, categoryId);
+  const docSnap = await getDoc(docRef);
+
+  const data = docSnap.data() as CategoryDef;
+
+  return {
+    ...data,
+    id: categoryId,
+  };
+};
+
 export const categoryApi = {
   getCategoryListApi,
+  getCategoryDetailApi,
 };

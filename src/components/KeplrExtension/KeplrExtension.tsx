@@ -31,12 +31,12 @@ const KeplrExtension: FC = () => {
   const redirectExtension = () => {
     window.open(
       "https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap",
-      "_blank"
+      "_target"
     );
   };
 
   const closeDialog = () => {
-    window.location.reload();
+    setIsOpenInstallExtension(false);
   };
 
   const handleLogin = useCallback(
@@ -222,7 +222,7 @@ const KeplrExtension: FC = () => {
   return (
     <Dialog
       open={isOpenInstallExtension}
-      maxWidth="sm"
+      maxWidth="xs"
       fullWidth
       disableAutoFocus
     >

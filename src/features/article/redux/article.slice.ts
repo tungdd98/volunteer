@@ -6,19 +6,23 @@ import {
   articleApi,
   ArticleDef,
   ArticleForm,
+  ArticleParams,
   CategoryArticleDef,
+  ProvinceDef,
 } from "../article";
 
 interface ArticleState {
   articles: ArticleDef[] | null;
   articleDetail: ArticleDef | null;
   articlesInfo: Record<string, CategoryArticleDef>;
+  provinces: ProvinceDef[];
 }
 
 const initialState: ArticleState = {
   articles: null,
   articleDetail: null,
   articlesInfo: {},
+  provinces: [],
 };
 
 export const getArticleList = createAsyncThunk<ArticleDef[]>(
@@ -83,12 +87,24 @@ export const updateCurrentDonate = createAsyncThunk<
 
 export const getArticleListByCategoryId = createAsyncThunk<
   ArticleDef[],
-  CategoryDef
->("article/getArticleListByCategoryId", async category => {
-  const response = await articleApi.getArticleListByCategoryIdApi(category.id);
+  { category: CategoryDef; params?: ArticleParams }
+>("article/getArticleListByCategoryId", async ({ category, params }) => {
+  const response = await articleApi.getArticleListByCategoryIdApi(
+    category.id,
+    params
+  );
 
   return response;
 });
+
+export const getProvinces = createAsyncThunk<ProvinceDef[]>(
+  "article/getProvinces",
+  async () => {
+    const response = await articleApi.getProvincesApi();
+
+    return response.data;
+  }
+);
 
 const articleSlice = createSlice({
   name: "article",
@@ -105,15 +121,19 @@ const articleSlice = createSlice({
       state.articleDetail = null;
     });
     builder.addCase(getArticleListByCategoryId.fulfilled, (state, action) => {
-      const category = action.meta.arg;
+      const { category } = action.meta.arg;
 
       state.articlesInfo = {
         ...state.articlesInfo,
         [category.id]: {
+          id: category.id,
           title: category.title,
           articles: action.payload,
         },
       };
+    });
+    builder.addCase(getProvinces.fulfilled, (state, action) => {
+      state.provinces = action.payload;
     });
   },
 });

@@ -2,14 +2,16 @@ import React, { FC, memo } from "react";
 
 import { Box, Button, Grid, Typography } from "@mui/material";
 
-import { useAppSelector } from "app/hooks";
+import { ArticleDef } from "features/article/article";
 
 import ArticleGridItem from "../../../components/ArticleGridItem/ArticleGridItem";
 
-const ListLayout: FC = () => {
-  const { articles } = useAppSelector(state => state.article);
+interface ListLayoutProps {
+  articles: ArticleDef[] | null;
+}
 
-  if (!articles) {
+const ListLayout: FC<ListLayoutProps> = ({ articles }) => {
+  if (!articles || !articles.length) {
     return <Typography textAlign="center">Không có dữ liệu</Typography>;
   }
 

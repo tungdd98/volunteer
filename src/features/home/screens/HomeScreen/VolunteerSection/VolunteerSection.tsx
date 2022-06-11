@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable import/no-unresolved */
 import React, { FC } from "react";
 
@@ -17,9 +16,9 @@ const VolunteerSection: FC = () => {
 
   return (
     <Container>
-      {Object.values(articlesInfo).map((category, idx) => {
+      {Object.values(articlesInfo).map(category => {
         return (
-          <Box key={`category-${idx}`} sx={{ mt: 5 }}>
+          <Box key={category.id} sx={{ mt: 5 }}>
             <Box
               sx={{
                 display: "flex",
@@ -35,7 +34,10 @@ const VolunteerSection: FC = () => {
                 variant="body2"
                 textAlign="right"
                 color="primary"
-                to={ArticlePathsEnum.ARTICLE_LIST}
+                to={ArticlePathsEnum.ARTICLE_LIST.replace(
+                  /:categoryId/,
+                  category.id
+                )}
               >
                 Xem tất cả
               </CustomLink>

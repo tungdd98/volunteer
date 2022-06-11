@@ -48,6 +48,13 @@ const DonateProgressScreen: FC = () => {
 
   const recipient = articleDetail?.senderAddress;
 
+  const redirectExtension = () => {
+    window.open(
+      "https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap",
+      "_target"
+    );
+  };
+
   const submitForm = async (values: { donate: string }) => {
     if (!recipient) {
       return;
@@ -245,7 +252,9 @@ const DonateProgressScreen: FC = () => {
                     type="submit"
                     variant="contained"
                     size="large"
-                    disabled={!recipient || !userInfo?.codeInfo}
+                    disabled={
+                      !recipient || !userInfo?.codeInfo || !window.keplr
+                    }
                   >
                     Ủng hộ ngay {donate} ORAI
                   </Button>
@@ -262,6 +271,25 @@ const DonateProgressScreen: FC = () => {
                         to={AuthPathsEnum.UPDATE_PROFILE}
                       >
                         Xác thực ngay
+                      </Typography>
+                    </Box>
+                  )}
+                  {!window.keplr && (
+                    <Box sx={{ mt: 3 }}>
+                      <Typography variant="caption" color="GrayText">
+                        *Xin vui lòng cài đặt{" "}
+                        <Typography color="primary" variant="caption">
+                          Keplr extension
+                        </Typography>{" "}
+                        để có thể sử dụng các chức năng của hệ thống
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="primary"
+                        onClick={redirectExtension}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        Cài đặt
                       </Typography>
                     </Box>
                   )}

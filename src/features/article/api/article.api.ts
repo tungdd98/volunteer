@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import {
   collection,
   getDocs,
@@ -9,9 +10,10 @@ import {
   where,
 } from "firebase/firestore";
 
+import { api } from "app/axios";
 import { db } from "app/firebase";
 
-import { ArticleDef, ArticleForm } from "../article";
+import { ArticleDef, ArticleForm, ArticleParams } from "../article";
 
 const collectionName = "articles";
 
@@ -88,12 +90,23 @@ const updateCurrentDonateArticleApi = async (
 };
 
 const getArticleListByCategoryIdApi = async (
-  categoryId: string
+  categoryId: string,
+  params?: ArticleParams
 ): Promise<ArticleDef[]> => {
-  const q = query(
-    collection(db, collectionName),
-    where("categoryId", "==", categoryId)
-  );
+  let q = null;
+  if (params?.provinceCode) {
+    q = query(
+      collection(db, collectionName),
+      where("categoryId", "==", categoryId),
+      where("provinceCode", "==", params.provinceCode.toString())
+    );
+  } else {
+    q = query(
+      collection(db, collectionName),
+      where("categoryId", "==", categoryId)
+    );
+  }
+
   const querySnapshot = await getDocs(q);
   const data: ArticleDef[] = [];
 
@@ -108,6 +121,10 @@ const getArticleListByCategoryIdApi = async (
   return data;
 };
 
+const getProvincesApi = (): Promise<AxiosResponse> => {
+  return api.get("https://provinces.open-api.vn/api/p/");
+};
+
 export const articleApi = {
   getArticleListApi,
   getArticleDetailApi,
@@ -115,4 +132,5 @@ export const articleApi = {
   updateArticleApi,
   updateCurrentDonateArticleApi,
   getArticleListByCategoryIdApi,
+  getProvincesApi,
 };
