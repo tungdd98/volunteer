@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { FormikHelpers } from "formik";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import { useAppDispatch } from "app/hooks";
 import {
@@ -17,6 +17,10 @@ import FormEdit from "../../../components/FormEdit/FormEdit";
 
 const CreateScreen: FC = () => {
   const history = useHistory();
+  const { categoryId } = useParams<{
+    categoryId: string;
+  }>();
+
   const dispatch = useAppDispatch();
 
   const handleCreateArticle = async (
@@ -32,7 +36,9 @@ const CreateScreen: FC = () => {
     )
       .catch(error => handleShowSnackbar({ error, dispatch }))
       .then(() => {
-        history.push(ArticlePathsEnum.ARTICLE_LIST_ADMIN);
+        history.push(
+          ArticlePathsEnum.ARTICLE_LIST_ADMIN.replace(/:categoryId/, categoryId)
+        );
       })
       .finally(() => setSubmitting(false));
   };

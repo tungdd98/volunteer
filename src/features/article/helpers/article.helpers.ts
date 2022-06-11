@@ -21,6 +21,8 @@ export const initialCreateArticle: ArticleForm = {
   albums: [],
   tags: [],
   senderAddress: "",
+  provinceCode: "",
+  categoryId: "",
 };
 
 export const articleSchema = yup.object().shape({
@@ -28,6 +30,8 @@ export const articleSchema = yup.object().shape({
   content: yup.string().required(DefaultMessages.REQUIRED),
   maxDonate: yup.string().required(DefaultMessages.REQUIRED),
   senderAddress: yup.string().required(DefaultMessages.REQUIRED),
+  provinceCode: yup.string().required(DefaultMessages.REQUIRED),
+  categoryId: yup.string().required(DefaultMessages.REQUIRED),
 });
 
 export const setEditArticleForm = (data: ArticleDef): ArticleForm => {
@@ -40,5 +44,7 @@ export const setEditArticleForm = (data: ArticleDef): ArticleForm => {
     albums: data.albums,
     tags: data.tags,
     senderAddress: data.senderAddress,
+    provinceCode: data.provinceCode,
+    categoryId: data.categoryId,
   };
 };

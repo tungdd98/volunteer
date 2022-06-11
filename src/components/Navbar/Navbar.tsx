@@ -17,7 +17,6 @@ import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
-import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
 import { CategoryPathsEnum } from "features/category/category";
 import { ROOT_ROUTE } from "routes/routes.config";
@@ -94,9 +93,6 @@ const Navbar: FC = () => {
       >
         <MenuItem component={Link} to={CategoryPathsEnum.ADMIN_LIST}>
           Danh mục sự kiện
-        </MenuItem>
-        <MenuItem component={Link} to={ArticlePathsEnum.ARTICLE_LIST_ADMIN}>
-          Sự kiện ủng hộ
         </MenuItem>
         <MenuItem component={Link} to={AuthPathsEnum.MY_PROFILE}>
           Thông tin cá nhân

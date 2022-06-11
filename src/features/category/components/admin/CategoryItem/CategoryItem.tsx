@@ -2,7 +2,9 @@ import React, { FC, memo } from "react";
 
 import { MoreVertRounded } from "@mui/icons-material";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
+import { useHistory } from "react-router-dom";
 
+import { ArticlePathsEnum } from "features/article/article";
 import { CategoryDef } from "features/category/category";
 
 interface CategoryItemProps {
@@ -14,6 +16,14 @@ interface CategoryItemProps {
 }
 
 const CategoryItem: FC<CategoryItemProps> = ({ category, handleOpenMenu }) => {
+  const history = useHistory();
+
+  const redirectArticleListScreen = () => {
+    history.push(
+      ArticlePathsEnum.ARTICLE_LIST_ADMIN.replace(/:categoryId/, category.id)
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -22,9 +32,11 @@ const CategoryItem: FC<CategoryItemProps> = ({ category, handleOpenMenu }) => {
         alignItems: "center",
         mb: 2,
         p: 1,
+        cursor: "pointer",
       }}
       component={Paper}
       elevation={10}
+      onClick={redirectArticleListScreen}
     >
       <Typography fontWeight={600} sx={{ flexGrow: 1 }}>
         {category.title}

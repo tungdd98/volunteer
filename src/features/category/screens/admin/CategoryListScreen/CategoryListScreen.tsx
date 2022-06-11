@@ -36,6 +36,7 @@ const CategoryListScreen: FC = () => {
     event: React.MouseEvent<HTMLElement>,
     item: CategoryDef
   ) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
     setSelectedCategory(item);
   };

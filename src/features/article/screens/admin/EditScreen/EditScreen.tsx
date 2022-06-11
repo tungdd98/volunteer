@@ -23,7 +23,10 @@ const EditScreen: FC = () => {
   const dispatch = useAppDispatch();
   const { articleDetail } = useAppSelector(state => state.article);
 
-  const { articleId } = useParams<{ articleId: string }>();
+  const { articleId, categoryId } = useParams<{
+    articleId: string;
+    categoryId: string;
+  }>();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,7 +46,9 @@ const EditScreen: FC = () => {
     )
       .catch(error => handleShowSnackbar({ error, dispatch }))
       .then(() => {
-        history.push(ArticlePathsEnum.ARTICLE_LIST_ADMIN);
+        history.push(
+          ArticlePathsEnum.ARTICLE_LIST_ADMIN.replace(/:categoryId/, categoryId)
+        );
       })
       .finally(() => setSubmitting(false));
   };

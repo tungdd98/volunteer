@@ -9,6 +9,8 @@ export interface ArticleDef {
   albums: string[];
   tags: string[];
   senderAddress: string;
+  provinceCode: string;
+  categoryId: string;
 }
 
 export type ArticleForm = Omit<
