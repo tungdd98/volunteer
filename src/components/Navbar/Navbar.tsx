@@ -14,12 +14,12 @@ import {
   Stack,
   Toolbar,
   Typography,
+  Link as MuiLink,
 } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import CustomLink from "components/CustomLink/CustomLink";
 import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
 import { BannerPathsEnum } from "features/banner/banner";
@@ -64,15 +64,17 @@ const Navbar: FC = () => {
     <>
       <AppBar position="sticky" color="secondary">
         <Toolbar>
-          <CustomLink
-            to={ROOT_ROUTE}
-            variant="h6"
-            fontWeight={600}
-            sx={{ flexGrow: 1, textDecoration: "none" }}
-            isActive
+          <MuiLink
+            href={ROOT_ROUTE}
+            sx={{
+              flexGrow: 1,
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: 24,
+            }}
           >
             LOGO
-          </CustomLink>
+          </MuiLink>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Stack direction="row" spacing={2}>
