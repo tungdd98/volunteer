@@ -1,9 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 
-import { Box, Container, Typography } from "@mui/material";
+import { MailRounded } from "@mui/icons-material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Form, Formik } from "formik";
 import { useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
+import FormikTextField from "components/FormElements/FormikTextField/FormikTextField";
 import Loader from "components/Loader/Loader";
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
@@ -52,6 +55,54 @@ const DetailScreen: FC = () => {
             }}
           />
         </Box>
+      </Container>
+
+      <Container maxWidth="xs">
+        <Paper sx={{ p: 2 }} elevation={10}>
+          <Formik
+            initialValues={{ name: "", email: "", phone: "", content: "" }}
+            onSubmit={() => {
+              // TODO:
+            }}
+          >
+            <Form>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <MailRounded color="primary" sx={{ mr: 1, fontSize: 60 }} />
+                <Typography variant="subtitle1">
+                  Hãy để lại liên hệ cho chúng tôi
+                </Typography>
+              </Box>
+
+              <FormikTextField name="name" fullWidth placeholder="Họ và tên" />
+
+              <FormikTextField
+                name="email"
+                type="email"
+                fullWidth
+                placeholder="Email"
+              />
+
+              <FormikTextField
+                name="phone"
+                type="tel"
+                fullWidth
+                placeholder="Số điện thoại"
+              />
+
+              <FormikTextField
+                name="content"
+                fullWidth
+                placeholder="Nội dung hỏi đáp"
+                multiline
+                rows={3}
+              />
+
+              <Button fullWidth variant="contained" size="large" type="submit">
+                Gửi liên hệ
+              </Button>
+            </Form>
+          </Formik>
+        </Paper>
       </Container>
     </>
   );

@@ -255,7 +255,7 @@ const DonateProgressScreen: FC = () => {
                         <InputAdornment position="start">ORAI</InputAdornment>
                       ),
                     }}
-                    type="phone"
+                    type="tel"
                     placeholder="100"
                   />
 
