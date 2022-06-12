@@ -9,7 +9,10 @@ export const initialDonate = {
 };
 
 export const donateSchema = yup.object().shape({
-  donate: yup.number().required(DefaultMessages.REQUIRED),
+  donate: yup
+    .string()
+    .matches(/^[0-9]*$/)
+    .required(DefaultMessages.REQUIRED),
 });
 
 export const initialCreateArticle: ArticleForm = {

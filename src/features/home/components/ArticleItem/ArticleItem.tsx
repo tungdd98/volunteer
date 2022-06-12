@@ -8,6 +8,7 @@ import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
 import { ArticleDef, ArticlePathsEnum } from "features/article/article";
 import { toCurrency } from "helpers/convert/currency";
+import { truncateString } from "helpers/convert/truncate-string";
 
 interface ArticleItemProps {
   article: ArticleDef;
@@ -18,13 +19,25 @@ const ArticleItem: FC<ArticleItemProps> = ({ article }) => {
     <Box sx={{ p: 1 }}>
       <Paper elevation={5} sx={{ p: 2 }}>
         <PreviewImage
-          aspectRatio={AspectRatioEnum.SIXTEEN_TO_NINE}
+          aspectRatio={AspectRatioEnum.ONE_TO_ONE}
           src={article.thumbnail}
           alt={article.title}
         />
 
-        <Typography sx={{ my: 1 }} variant="subtitle1">
-          {article.title}
+        <Typography
+          sx={{
+            my: 1,
+            height: 56,
+            overflow: "hidden",
+            textDecoration: "none",
+            display: "block",
+          }}
+          variant="subtitle1"
+          component={Link}
+          color="#000"
+          to={ArticlePathsEnum.ARTICLE_DETAIL.replace(/:articleId/, article.id)}
+        >
+          {truncateString(article.title)}
         </Typography>
         <Box
           sx={{
@@ -54,7 +67,7 @@ const ArticleItem: FC<ArticleItemProps> = ({ article }) => {
             variant="contained"
             size="small"
             component={Link}
-            to={ArticlePathsEnum.ARTICLE_DETAIL.replace(
+            to={ArticlePathsEnum.DONATE_PROGRESS.replace(
               /:articleId/,
               article.id
             )}

@@ -212,7 +212,7 @@ const DonateProgressScreen: FC = () => {
                 color: "white",
               }}
             >
-              <Typography variant="h1" fontSize={20} sx={{ mb: 3 }}>
+              <Typography variant="h1" fontSize={20} sx={{ mb: 3, px: 4 }}>
                 {articleDetail.title}
               </Typography>
               <Typography variant="h2" sx={{ mb: 3 }}>
@@ -255,7 +255,7 @@ const DonateProgressScreen: FC = () => {
                         <InputAdornment position="start">ORAI</InputAdornment>
                       ),
                     }}
-                    type="number"
+                    type="phone"
                     placeholder="100"
                   />
 

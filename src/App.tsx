@@ -19,6 +19,7 @@ import {
   LOCAL_STORAGE_AUTH_KEY,
   setUserInfo,
 } from "features/auth/auth";
+import { getCategoryList } from "features/category/category";
 import { deepParseJson } from "helpers/convert/deep-parse-json";
 import RouterWrapper from "routes/RouterWrapper";
 
@@ -94,6 +95,10 @@ const App: FC = () => {
 
   useEffect(() => {
     dispatch(getProvinces());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCategoryList());
   }, [dispatch]);
 
   if (isLoading) {

@@ -1,22 +1,26 @@
 import React, { FC, useState } from "react";
 
-import { MenuRounded, LogoutRounded } from "@mui/icons-material";
+import { LogoutRounded } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
   Box,
+  Button,
   Divider,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { getAuth, signOut } from "firebase/auth";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
+import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
 import { CategoryPathsEnum } from "features/category/category";
 import { ROOT_ROUTE } from "routes/routes.config";
@@ -27,8 +31,10 @@ const Navbar: FC = () => {
 
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(state => state.auth);
+  const { categories } = useAppSelector(state => state.category);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorElBtn, setAnchorElBtn] = useState<null | HTMLElement>(null);
 
   const handleOpenAccountMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -36,6 +42,14 @@ const Navbar: FC = () => {
 
   const handleCloseAccountMenu = () => {
     setAnchorEl(null);
+  };
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElBtn(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElBtn(null);
   };
 
   const handleLogout = () => {
@@ -49,15 +63,6 @@ const Navbar: FC = () => {
     <>
       <AppBar position="sticky" color="secondary">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuRounded />
-          </IconButton>
           <CustomLink
             to={ROOT_ROUTE}
             variant="h6"
@@ -68,18 +73,29 @@ const Navbar: FC = () => {
             LOGO
           </CustomLink>
 
-          {userInfo && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              {userInfo?.displayName}
-              <IconButton onClick={handleOpenAccountMenu}>
-                <Avatar
-                  alt={userInfo?.displayName || "avatar"}
-                  src={userInfo?.photoURL || ""}
-                  sx={{ width: 30, height: 30 }}
-                />
-              </IconButton>
-            </Box>
-          )}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Stack direction="row" spacing={2}>
+              <Button onClick={handleOpenNavMenu}>
+                <Typography fontWeight={600}>Hoàn cảnh khó khăn</Typography>
+              </Button>
+              <Button>
+                <Typography fontWeight={600}>Chuyến đi thiện nguyện</Typography>
+              </Button>
+            </Stack>
+
+            {userInfo && (
+              <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
+                {userInfo?.displayName}
+                <IconButton onClick={handleOpenAccountMenu}>
+                  <Avatar
+                    alt={userInfo?.displayName || "avatar"}
+                    src={userInfo?.photoURL || ""}
+                    sx={{ width: 30, height: 30 }}
+                  />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -104,6 +120,25 @@ const Navbar: FC = () => {
           </ListItemIcon>
           Đăng xuất
         </MenuItem>
+      </Menu>
+
+      <Menu
+        anchorEl={anchorElBtn}
+        open={!!anchorElBtn}
+        onClose={handleCloseNavMenu}
+        onClick={handleCloseNavMenu}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        {categories?.map(item => (
+          <MenuItem
+            key={item.id}
+            component={Link}
+            to={ArticlePathsEnum.ARTICLE_LIST.replace(/:categoryId/, item.id)}
+          >
+            {item.title}
+          </MenuItem>
+        ))}
       </Menu>
     </>
   );

@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import Loader from "components/Loader/Loader";
 import { getArticleListByCategoryId } from "features/article/article";
 import { getBannerList } from "features/banner/banner";
-import { getCategoryList } from "features/category/category";
 import { getTripList } from "features/trip/trip";
 
 import BannerSection from "./BannerSection/BannerSection";
@@ -19,11 +18,9 @@ const HomeScreen: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      dispatch(getTripList()),
-      dispatch(getBannerList()),
-      dispatch(getCategoryList()),
-    ]).finally(() => setIsLoading(false));
+    Promise.all([dispatch(getTripList()), dispatch(getBannerList())]).finally(
+      () => setIsLoading(false)
+    );
   }, [dispatch]);
 
   useEffect(() => {

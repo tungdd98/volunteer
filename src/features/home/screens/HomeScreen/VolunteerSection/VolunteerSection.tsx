@@ -49,7 +49,6 @@ const VolunteerSection: FC = () => {
                 pagination={{
                   dynamicBullets: true,
                 }}
-                loop
                 breakpoints={{
                   "640": {
                     slidesPerView: 2,
@@ -61,6 +60,7 @@ const VolunteerSection: FC = () => {
                   },
                 }}
                 hasMargin
+                autoHeight
               >
                 {category.articles.map(article => (
                   <SwiperSlide key={article.id}>
