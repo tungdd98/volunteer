@@ -14,6 +14,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import { get } from "lodash";
@@ -44,12 +45,14 @@ const ReceivedDialog: FC<ReceivedDialogProps> = ({
     );
 
     const data = get(response.data, "txs") as unknown[];
-    const oraisChain = data.reduce((total: ReceivedOrai[], item) => {
+    const txData = get(response.data, "tx_responses") as unknown[];
+    const oraisChain = data.reduce((total: ReceivedOrai[], item, index) => {
       const message = get(item, "body.messages[0]");
       const type = get(message, "@type");
       const amount = get(message, "amount[0].amount");
       const fromAddress = get(message, "from_address");
       const toAddress = get(message, "to_address");
+      const hash = get(txData[index], "txhash");
 
       if (type === "/cosmos.bank.v1beta1.MsgSend") {
         return [
@@ -58,6 +61,7 @@ const ReceivedDialog: FC<ReceivedDialogProps> = ({
             fromAddress,
             toAddress,
             amount,
+            hash,
           },
         ];
       }
@@ -67,6 +71,10 @@ const ReceivedDialog: FC<ReceivedDialogProps> = ({
 
     setOrais(oraisChain);
   }, [recipient]);
+
+  const redirectDetailOraichain = (hash: string) => {
+    window.open(`https://scan.orai.io/txs/${hash}`, "_blank");
+  };
 
   useEffect(() => {
     getTotalOrai();
@@ -80,9 +88,12 @@ const ReceivedDialog: FC<ReceivedDialogProps> = ({
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Địa chỉ gửi</TableCell>
-                <TableCell>Địa chỉ nhận</TableCell>
-                <TableCell>Số Orai</TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>Địa chỉ gửi</TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>
+                  Địa chỉ nhận
+                </TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>Số Orai</TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }}>Kiểm tra</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -96,6 +107,18 @@ const ReceivedDialog: FC<ReceivedDialogProps> = ({
                   </TableCell>
                   <TableCell sx={{ wordBreak: "break-all" }}>
                     {toCurrency(Number(item.amount) / SCORE_ORAI, true)}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    onClick={() => redirectDetailOraichain(item.hash)}
+                  >
+                    <Typography
+                      variant="caption"
+                      color="primary"
+                      sx={{ cursor: "pointer", whiteSpace: "nowrap" }}
+                    >
+                      Xem chi tiết
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ))}

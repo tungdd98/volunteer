@@ -25,6 +25,7 @@ export interface ReceivedOrai {
   fromAddress: string;
   toAddress: string;
   amount: string;
+  hash: string;
 }
 
 export interface CategoryArticleDef {
