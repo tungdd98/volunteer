@@ -21,4 +21,11 @@ const CREATE_SCREEN: RouteItem = {
   layout: AdminNoSidebar,
 };
 
-export const BANNER_ROUTES = [LIST_SCREEN, CREATE_SCREEN];
+const EDIT_SCREEN: RouteItem = {
+  id: "banner-edit",
+  path: BannerPathsEnum.ADMIN_EDIT,
+  component: React.lazy(() => import("../screens/EditScreen/EditScreen")),
+  layout: AdminNoSidebar,
+};
+
+export const BANNER_ROUTES = [LIST_SCREEN, CREATE_SCREEN, EDIT_SCREEN];
