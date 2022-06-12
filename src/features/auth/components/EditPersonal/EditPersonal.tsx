@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { FC, memo, useRef } from "react";
+import React, { FC, memo, useRef, useState } from "react";
 
 import { PhotoCameraFrontRounded } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
@@ -39,6 +39,8 @@ const EditPersonal: FC<EditPersonalProps> = ({
   const formikRef: React.Ref<FormikProps<SignUpPersonalInformationForm>> =
     useRef(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleUploadFile = (files: FileList | null) => {
     const file = files ? files[0] : null;
 
@@ -54,6 +56,8 @@ const EditPersonal: FC<EditPersonalProps> = ({
       formikRef.current.setFieldValue("personalCode", file);
     }
 
+    setIsSubmitting(true);
+
     dispatch(uploadPersonalCode(file))
       .then(unwrapResult)
       .then(res => {
@@ -66,7 +70,8 @@ const EditPersonal: FC<EditPersonalProps> = ({
       })
       .catch(() => {
         handleShowSnackbar({ dispatch, msg: "Upload fail" });
-      });
+      })
+      .finally(() => setIsSubmitting(false));
   };
 
   return (
@@ -151,6 +156,7 @@ const EditPersonal: FC<EditPersonalProps> = ({
               size="large"
               fullWidth
               type="submit"
+              disabled={isSubmitting}
             >
               Xác nhận
             </Button>
