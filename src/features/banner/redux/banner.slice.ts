@@ -20,6 +20,18 @@ export const getBannerList = createAsyncThunk<BannerDef[]>(
   }
 );
 
+export const createBanner = createAsyncThunk<null, string>(
+  "banner/createBanner",
+  async (data, { rejectWithValue }) => {
+    try {
+      await bannerApi.createBannerApi(data);
+      return null;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const bannerSlice = createSlice({
   name: "banner",
   initialState,

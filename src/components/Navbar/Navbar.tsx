@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import CustomLink from "components/CustomLink/CustomLink";
 import { ArticlePathsEnum } from "features/article/article";
 import { AuthPathsEnum, logout } from "features/auth/auth";
+import { BannerPathsEnum } from "features/banner/banner";
 import { CategoryPathsEnum } from "features/category/category";
 import { ROOT_ROUTE } from "routes/routes.config";
 
@@ -109,6 +110,9 @@ const Navbar: FC = () => {
       >
         <MenuItem component={Link} to={CategoryPathsEnum.ADMIN_LIST}>
           Danh mục sự kiện
+        </MenuItem>
+        <MenuItem component={Link} to={BannerPathsEnum.ADMIN_LIST}>
+          Banner
         </MenuItem>
         <MenuItem component={Link} to={AuthPathsEnum.MY_PROFILE}>
           Thông tin cá nhân

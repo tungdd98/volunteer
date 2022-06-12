@@ -1,10 +1,11 @@
 import React, { FC, memo } from "react";
 
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import PreviewImage from "components/PreviewImage/PreviewImage";
 import { AspectRatioEnum } from "constants/common.constants";
-import { TripDef } from "features/trip/trip";
+import { TripDef, TripPathsEnum } from "features/trip/trip";
 
 interface TripItemProps {
   trip: TripDef;
@@ -30,7 +31,12 @@ const TripItem: FC<TripItemProps> = ({ trip }) => {
                 {trip.description}
               </Typography>
             </Box>
-            <Button variant="contained" fullWidth>
+            <Button
+              variant="contained"
+              fullWidth
+              component={Link}
+              to={TripPathsEnum.DETAIL.replace(/:tripId/, trip.id)}
+            >
               Tham gia ngay
             </Button>
           </Grid>

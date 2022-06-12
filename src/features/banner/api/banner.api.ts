@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 import { db } from "app/firebase";
 
@@ -21,6 +21,13 @@ const getBannerListApi = async (): Promise<BannerDef[]> => {
   return data;
 };
 
+const createBannerApi = async (thumbnail: string): Promise<null> => {
+  await addDoc(collection(db, collectionName), { thumbnail });
+
+  return null;
+};
+
 export const bannerApi = {
   getBannerListApi,
+  createBannerApi,
 };

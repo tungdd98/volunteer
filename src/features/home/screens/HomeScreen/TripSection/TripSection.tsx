@@ -24,7 +24,6 @@ const TripSection: FC = () => {
           pagination={{
             dynamicBullets: true,
           }}
-          loop
           breakpoints={{
             "640": {
               slidesPerView: 2,
