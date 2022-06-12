@@ -73,7 +73,7 @@ const Navbar: FC = () => {
               fontSize: 24,
             }}
           >
-            LOGO
+            Blue Team
           </MuiLink>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
